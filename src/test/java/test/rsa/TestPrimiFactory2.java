@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -191,6 +190,7 @@ public class TestPrimiFactory2 {
     // List<Long> lilo = deserializza(lilo, "ForEPrimo1");
   }
 
+  @SuppressWarnings("unused")
   private void serializza(List<Long> li, String msg) {
     String szFil = String.format(CSZ_FILE_PRIMI, msg);
     File fi = new File(szFil);

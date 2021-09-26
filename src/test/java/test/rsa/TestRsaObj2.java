@@ -82,15 +82,19 @@ public class TestRsaObj2 {
     BigInteger p1;
     BigInteger p2;
 
-    p1 = BigInteger.valueOf(311);
-    p2 = BigInteger.valueOf(313);
+    p1 = BigInteger.valueOf(61);
+    p2 = BigInteger.valueOf(53);
     //    p1 = cercaPrimo(p1);
     //    p2 = cercaPrimo(p2);
     rsa.setNP(p1);
     rsa.setNQ(p2);
     rsa.stampaRis();
     rsa.calcolaRSAObj();
-    System.out.printf("E=%d,D=%d\n", rsa.getNE().longValue(), rsa.getND().longValue());
+
+    BigInteger probe = BigInteger.valueOf(121);
+    
+    BigInteger verso = rsa.esponenteE(probe);
+    BigInteger ritor = rsa.esponenteD(verso);
 
   }
 

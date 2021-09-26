@@ -5,19 +5,25 @@ import java.text.NumberFormat;
 
 import lombok.Getter;
 import lombok.Setter;
+import sm.ciscoop.crypt.gcd.Gcd;
+import sm.ciscoop.crypt.gcd.GcdRec;
 
 public class RsaObj2 {
-  private static final BigInteger    UNO = BigInteger.ONE;
+  private static final BigInteger    UNO     = BigInteger.ONE;
+  private static int                 MAX_BIT = 64;
   // private static final BigInteger    DUE = BigInteger.valueOf(2);
 
   @Getter @Setter private BigInteger nP;
   @Getter @Setter private BigInteger nQ;
   @Getter @Setter private BigInteger nPQmodulus;
   @Getter @Setter private BigInteger nPQTotientFi;
+  private BigInteger                 nCarmichael;
   @Getter @Setter private BigInteger nE;
   @Getter @Setter private BigInteger nD;
   private long                       m_nProbes;
   // private BigInteger              m_GuessKprev;
+
+  private BigInteger[]               arrExp;
 
   public void calcolaRSAObj() {
     nPQmodulus = null;
@@ -44,7 +50,17 @@ public class RsaObj2 {
    * in matematica si scrive<br/>
    * <code>1 = gcd( E, &#632; ) </code></li>
    * </ol>
-   *
+   * <h2>da Rsa.cpp</h2> Calcola <b>E</b> con il seguente algoritmo
+   * <ul>
+   * <li><b>E</b> e' maggiore di 1,</li>
+   * <li><b>E</b> e' minore di <b>PQ</b>,</li>
+   * <li><b>E</b> e <code>(P-1)(Q-1)</code> sono reciprocamente primi, che
+   * significa che non hanno fattori primi in comune.</li>
+   * </ul>
+   * <b>E</b> non deve essere obbligatoriamente primo, ma deve essere dispari.
+   * <p>
+   * <code>(P-1)(Q-1)</code> non puo' essere primo perche' e' un numero pari.
+   * 
    * @return
    */
   private BigInteger calcolaE2() {
@@ -52,21 +68,39 @@ public class RsaObj2 {
     nE = BigInteger.ZERO;
     if ( (nP.multiply(nQ).equals(BigInteger.ZERO)) || (nP.equals(nQ)))
       return nE;
+    GcdRec res = new GcdRec(BigInteger.TWO, null, null);
     nPQmodulus = nP.multiply(nQ);
     BigInteger npm1 = nP.subtract(UNO);
     BigInteger nqm1 = nQ.subtract(UNO);
     // BigInteger nProbE = igcd(npm1, nqm1);
 
     nPQTotientFi = npm1.multiply(nqm1);
-    stampaRis();
-    BigInteger mcd = BigInteger.TWO;
+    nCarmichael = Gcd.lcm(npm1, nqm1);
+    //    BigInteger mcd = BigInteger.TWO;
     // cerco un elemento co-primo che sia inferiore a (P-1)(Q-1) scendendo di 1
-    nE = nPQTotientFi.divide(BigInteger.TWO);
-    do {
-      nE = nE.subtract(BigInteger.ONE);
-      mcd = igcd(nPQmodulus, nE);
-      stampaRis();
-    } while ( !mcd.equals(BigInteger.ONE));
+    // nE = nPQTotientFi.divide(BigInteger.TWO);
+    // scelgo un intero E che sia primo e co-primo con carmicael 
+    nE = nCarmichael.divide(BigInteger.TWO);
+    if ( !nE.testBit(0))
+      nE = nE.subtract(UNO);
+    //    stampaRis();
+    //    do {
+    //      nE = nE.subtract(BigInteger.TWO);
+    //      // mcd = igcd(nPQmodulus, nE);
+    //      // res = Gcd.gcd(nE, nPQTotientFi);
+    //      res = Gcd.gcd(nE, nCarmichael);
+    //      stampaRis();
+    //      System.out.println(res.toString());
+    //      // } while ( !mcd.equals(BigInteger.ONE));
+    //    } while ( !res.resto().equals(BigInteger.ONE));
+    while (true) {
+      if (isPrimo(nE)) {
+        res = Gcd.gcd(nE, nCarmichael);
+        if (res.resto().equals(BigInteger.ONE))
+          break;
+      }
+      nE = nE.add(BigInteger.TWO);
+    }
     return nE;
   }
 
@@ -82,8 +116,9 @@ public class RsaObj2 {
    * <li>N - <code>PQ</code> detto anche <i>modulus</i></li>
    * <li>&#x3C6;(n) -
    * <code>(P-1)(Q-1) chiamata <i>Euler totient function</i></code></li>
-   * <li>E - Si sceglie tale che E &lt; N inoltre gcd(e,&#x3C6;(n)) = 1 e
-   * cio&egrave; E deve essere <b>co-primo</b> con &#x3C6;(n)</li>
+   * <li>E - Si sceglie tale che E &lt; N <br/>
+   * inoltre gcd(e,&#x3C6;(n)) = 1 e cio&egrave; E deve essere <b>co-primo</b>
+   * con &#x3C6;(n)</li>
    * <li>D - Si chiama l'inverso moltiplicativo di E.<br/>
    * Inoltre ED = 1 mod &#x3C6;(n)</li>
    * </ul>
@@ -91,12 +126,42 @@ public class RsaObj2 {
    * Questo &egrave; facile da fare - semplicemente trovare un intero X che
    * causa D = (X*(P-1)(Q-1) + 1) / E per essere un numero intero, quindi
    * utilizzare tale valore di D
-   *
+   * <h2>tratto da Rsa.cpp</h2> Trova <b>D</b> cosi che <code>(DE - 1)</code> e'
+   * divisibile da <code>(P-1)(Q-1)</code>.
+   * <p>
+   * In matematica si puo' scrivere cosi <code>DE = 1 (mod (P-1)(Q-1))</code>,
+   * <p>
+   * e D si chiama il fattore inverso di E.
+   * <p>
+   * E' facile da fare:
+   * <p>
+   * trova un'intero <b>X</b> cosi che <code>D = (X(P-1)(Q-1) + 1)/E</code>
+   * <p>
+   * sia un'intero, utilizza, di conseguenza, questo valore come <b>D</b>.
+   * 
    * @return
    */
   private BigInteger calcolaD2() {
+    NumberFormat fmt = NumberFormat.getIntegerInstance();
     BigInteger biRet = null;
     BigInteger[] biResto = { BigInteger.ZERO, UNO };
+
+    // 1) verifico che x * e mod fi == 1 iterando x
+    BigInteger d_naif = Gcd.multModInvNaif(nE, nPQTotientFi);
+    // 2) recupero il valore di d=x da euclide
+    // se x<0 allora d=x mod fi
+    GcdRec rec = Gcd.gcd(nE, nPQTotientFi);
+    BigInteger d_eucl = rec.x();
+    if (d_eucl.signum() == -1)
+      d_eucl = d_eucl.mod(nPQTotientFi);
+    // 3) chiedo a Java il inverse moltiplicativo di e modulo fi
+    BigInteger d_jmoinv = nE.modInverse(nPQTotientFi);
+
+    System.out.printf("naif d=%s\tEuclide d=%s\tmod.inv=%s\n", //
+        fmt.format(d_naif), //
+        fmt.format(d_eucl), //
+        fmt.format(d_jmoinv));
+    // 4) trovare un intero X che causa D = (X*(P-1)(Q-1) + 1) / E per essere un numero intero
     m_nProbes = 1;
     while ( !biResto[1].equals(BigInteger.ZERO) || biResto[0].equals(nE)) {
       BigInteger k = BigInteger.valueOf(m_nProbes++);
@@ -105,14 +170,14 @@ public class RsaObj2 {
           .multiply(nPQTotientFi) //
           .add(BigInteger.ONE) //
           .divideAndRemainder(nE);
-      System.out.printf("K=%d, prob=%d ( resto=%d)\n", k.longValue(), m_nProbes, biResto[1].longValue());
+      // System.out.printf("K=%d, prob=%d ( resto=%d)\n", k.longValue(), m_nProbes, biResto[1].longValue());
     }
     nD = biResto[0];
     stampaRis();
     String sz = "Trovato al " + m_nProbes;
     sz += " D=" + biResto[0].toString();
     sz += " ED=1 mod(fi) = " + nE.multiply(nD).mod(nPQTotientFi).toString();
-    System.out.println(nE.modInverse(nPQTotientFi).toString());
+
     log(sz);
     return biRet;
   }
@@ -159,6 +224,73 @@ public class RsaObj2 {
       p_b = r;
     }
     return p_a;
+  }
+
+  public boolean isPrimo(BigInteger p) {
+    // range  < p <= 1
+    if (p == null || p.compareTo(BigInteger.ONE) <= 0)
+      return false;
+    // range  2 < p <= 5
+    if (p.compareTo(BigInteger.valueOf(25)) <= 0) {
+      switch (p.intValue()) {
+        case 2:
+        case 3:
+        case 5:
+        case 7:
+        case 11:
+        case 13:
+        case 17:
+        case 19:
+        case 23:
+          return true;
+        default:
+          return false;
+      }
+    }
+    if (p.mod(BigInteger.TWO).equals(BigInteger.ZERO) || p.mod(BigInteger.valueOf(3)).equals(BigInteger.ZERO))
+      return false;
+    BigInteger k = BigInteger.valueOf(5);
+    // partendo da 5 (x=1) verifico il mod su 6x-1 e 6x+1
+    while (k.multiply(k).compareTo(p) <= 0) {
+      if (p.mod(k).equals(BigInteger.ZERO))
+        return false;
+      if (p.mod(k.add(BigInteger.TWO)).equals(BigInteger.ZERO))
+        return false;
+      k = k.add(BigInteger.valueOf(6));
+    }
+    return true;
+  }
+
+  public BigInteger esponenteE(BigInteger p_val) {
+    return esponente(p_val, nE, nPQmodulus);
+  }
+
+  public BigInteger esponenteD(BigInteger p_val) {
+    return esponente(p_val, nD, nPQmodulus);
+  }
+
+  private BigInteger esponente(BigInteger p_val, BigInteger p_exp, BigInteger p_mod) {
+    BigInteger ris = p_val;
+    if (p_val.compareTo(p_mod) >= 0)
+      System.err.println("Val=" + p_val + "\t> PQ=" + p_mod);
+
+    arrExp = new BigInteger[MAX_BIT];
+    // genero l'esponente a modulo
+    arrExp[0] = p_val;
+    for (int i = 1; i < MAX_BIT; i++) {
+      // v(i) = v(i-1)^2 mod m
+      ris = ris.multiply(ris);
+      ris = ris.mod(p_mod);
+      arrExp[i] = ris;
+    }
+    ris = BigInteger.ONE;
+    for (int i = 0; i < MAX_BIT; i++) {
+      if (p_exp.testBit(i)) {
+        // CDbl(nRes) * CDbl(arExp(i)), CDbl(nMod)
+        ris = ris.multiply(arrExp[i]).mod(p_mod);
+      }
+    }
+    return ris;
   }
 
   /**
@@ -318,6 +450,7 @@ public class RsaObj2 {
     stampaRis(" Q", nQ);
     stampaRis(" N", nPQmodulus);
     stampaRis("Fi", nPQTotientFi);
+    stampaRis("Cr", nCarmichael);
     stampaRis(" E", nE);
     stampaRis(" D", nD);
 

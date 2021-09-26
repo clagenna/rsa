@@ -48,8 +48,8 @@ public class ProvaGcdArrOK {
   void provaBI(BigInteger p1, BigInteger p2) {
     BigInteger a = p1;
     BigInteger b = p2;
-    Gcd g = new Gcd();
-    GcdRec res = g.gcd(a, b);
+
+    GcdRec res = Gcd.gcd(a, b);
     BigInteger res2 = a.multiply(res.x()).add(b.multiply(res.y()));
     NumberFormat fmt = NumberFormat.getIntegerInstance();
     System.out.printf("gcdBI(%s, %s)=%s\tx=%s y=%s\tres2=%s\n", //
