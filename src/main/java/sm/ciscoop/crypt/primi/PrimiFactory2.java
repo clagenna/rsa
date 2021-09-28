@@ -7,9 +7,11 @@ import java.util.List;
 
 import javax.swing.JProgressBar;
 
+import sm.ciscoop.crypt.gcd.Gcd;
+
 public class PrimiFactory2 {
   private static PrimiFactory2                                   s_inst;
-  private static final long                                      MAXV = 200_000_000;
+  private static final long                                      MAXV = 2_000_000_000L;
   @SuppressWarnings("unused") private static final DecimalFormat fmt  = new DecimalFormat("#,###,###,###,###");
 
   private List<Long>                                             liPrimi;
@@ -120,16 +122,28 @@ public class PrimiFactory2 {
   /**
    * Calcola il massimo comun divisore (GCD) fra 2 numeri
    *
+   * @deprecated vedi {@link Gcd#gcd(BigInteger, BigInteger)}
    * @param a
    * @param b
    * @return
    */
+  @Deprecated
   public BigInteger gcdExtended(BigInteger a, BigInteger b) {
     BigInteger x = BigInteger.ONE, y = BigInteger.ONE;
     return gcdExtended(a, b, x, y);
   }
 
-  // extended Euclidean Algorithm
+  /**
+   * extended Euclidean Algorithm
+   *
+   * @deprecated vedi {@link Gcd#gcd(BigInteger, BigInteger)}
+   * @param a
+   * @param b
+   * @param x
+   * @param y
+   * @return
+   */
+  @Deprecated
   public BigInteger gcdExtended(BigInteger a, BigInteger b, BigInteger x, BigInteger y) {
     // Base Case
     if (a.equals(BigInteger.ZERO)) {

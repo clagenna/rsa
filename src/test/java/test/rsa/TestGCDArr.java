@@ -26,7 +26,7 @@ public class TestGCDArr {
     RsaObj2 rsa = new RsaObj2();
     BigInteger np = BigInteger.valueOf(311);
     BigInteger nq = BigInteger.valueOf(313);
-    BigInteger nn = np.multiply(nq);
+    // BigInteger nn = np.multiply(nq);
     BigInteger npm1 = np.subtract(UNO);
     BigInteger nqm1 = nq.subtract(UNO);
 

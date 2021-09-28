@@ -51,6 +51,7 @@ public class TestPrimiFactory2 {
     System.out.println("Fine !");
   }
 
+  @SuppressWarnings("unused")
   private void forEProb() {
     liForEProb = new ArrayList<Long>();
     initList(liForEProb);
@@ -80,6 +81,7 @@ public class TestPrimiFactory2 {
     stampaResult(liForEPrimo1, "forEPrimo1");
   }
 
+  @SuppressWarnings("unused")
   private void streaEProb() {
     wtch = new StopWatch();
     wtch.start();
@@ -93,6 +95,7 @@ public class TestPrimiFactory2 {
     stampaResult(liStreaEProb, "streaEProb");
   }
 
+  @SuppressWarnings("unused")
   private void streamEPrimo0() {
     wtch = new StopWatch();
     wtch.start();
@@ -105,6 +108,7 @@ public class TestPrimiFactory2 {
     stampaResult(liStreaEPrim0, "streamEPrim0");
   }
 
+  @SuppressWarnings("unused")
   private void differenze(List<Long> li1, List<Long> li2, String p_m1, String p_m2) {
     List<Long> li = new ArrayList<>();
     String msg = "?";
@@ -136,6 +140,7 @@ public class TestPrimiFactory2 {
     return true;
   }
 
+  @SuppressWarnings("unused")
   private boolean isPrimo1(long vv) {
     boolean bRet = vv == 2 || (vv & 1) != 0;
     if (vv <= 7 || !bRet)
@@ -219,6 +224,7 @@ public class TestPrimiFactory2 {
     }
   }
 
+  @SuppressWarnings({ "unused", "unchecked" })
   private List<Long> deserializza(String msg) {
     String szFil = String.format(CSZ_FILE_PRIMI, msg);
     File fi = new File(szFil);

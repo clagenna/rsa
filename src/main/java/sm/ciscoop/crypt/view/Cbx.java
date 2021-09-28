@@ -76,21 +76,18 @@ public class Cbx extends javax.swing.JPanel {
     return lbl.getText();
   }
 
-  @SuppressWarnings("unchecked")
   public void setValue(Long vv) {
     m_lValue = vv;
     DefaultComboBoxModel<Long> cbm = (DefaultComboBoxModel<Long>) cb.getModel();
     cbm.setSelectedItem(m_lValue);
   }
 
-  @SuppressWarnings("unchecked")
   public Long getValue() {
     DefaultComboBoxModel<Long> cbm = (DefaultComboBoxModel<Long>) cb.getModel();
     m_lValue = (Long) cbm.getSelectedItem();
     return m_lValue;
   }
 
-  @SuppressWarnings("unchecked")
   public void setLista(List<Long> pl) {
     lista = pl;
     setNoEvent(true);
@@ -127,8 +124,8 @@ public class Cbx extends javax.swing.JPanel {
 
   //GEN-BEGIN:variables
   // Variables declaration - do not modify
-  private javax.swing.JComboBox cb;
-  private javax.swing.JLabel    lbl;
+  private javax.swing.JComboBox<Long> cb;
+  private javax.swing.JLabel          lbl;
   // End of variables declaration//GEN-END:variables
 
 }

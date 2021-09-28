@@ -71,16 +71,17 @@ public class Gcd {
 
     if (a == null || b == null || (a.compareTo(BigInteger.ZERO) <= 0) || (b.compareTo(BigInteger.ZERO) <= 0))
       return minMul;
+    minMul = a.divide(a.gcd(b)).multiply(b).abs();
 
-    BigInteger piccolo = a.compareTo(b) > 0 ? b : a;
-    BigInteger grande = a.compareTo(b) > 0 ? a : b;
-    minMul = piccolo;
-    BigInteger modMul = minMul.mod(grande);
-
-    while ( !modMul.equals(BigInteger.ZERO)) {
-      minMul = minMul.add(piccolo);
-      modMul = minMul.mod(grande);
-    }
+    //    BigInteger piccolo = a.compareTo(b) > 0 ? b : a;
+    //    BigInteger grande = a.compareTo(b) > 0 ? a : b;
+    //    minMul = piccolo;
+    //    BigInteger modMul = minMul.mod(grande);
+    //
+    //    while ( !modMul.equals(BigInteger.ZERO)) {
+    //      minMul = minMul.add(piccolo);
+    //      modMul = minMul.mod(grande);
+    //    }
     return minMul;
   }
 }

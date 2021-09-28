@@ -2,6 +2,8 @@ package sm.ciscoop.crypt.rsa;
 
 import java.math.BigInteger;
 import java.text.NumberFormat;
+import java.util.Date;
+import java.util.Random;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +11,8 @@ import sm.ciscoop.crypt.gcd.Gcd;
 import sm.ciscoop.crypt.gcd.GcdRec;
 
 public class RsaObj2 {
-  private static final BigInteger    UNO     = BigInteger.ONE;
-  private static int                 MAX_BIT = 64;
+  private static final BigInteger    UNO = BigInteger.ONE;
+  // private static int                 MAX_BIT = 64;
   // private static final BigInteger    DUE = BigInteger.valueOf(2);
 
   @Getter @Setter private BigInteger nP;
@@ -23,7 +25,7 @@ public class RsaObj2 {
   private long                       m_nProbes;
   // private BigInteger              m_GuessKprev;
 
-  private BigInteger[]               arrExp;
+  // private BigInteger[]               arrExp;
 
   public void calcolaRSAObj() {
     nPQmodulus = null;
@@ -72,33 +74,19 @@ public class RsaObj2 {
     nPQmodulus = nP.multiply(nQ);
     BigInteger npm1 = nP.subtract(UNO);
     BigInteger nqm1 = nQ.subtract(UNO);
-    // BigInteger nProbE = igcd(npm1, nqm1);
 
     nPQTotientFi = npm1.multiply(nqm1);
     nCarmichael = Gcd.lcm(npm1, nqm1);
-    //    BigInteger mcd = BigInteger.TWO;
-    // cerco un elemento co-primo che sia inferiore a (P-1)(Q-1) scendendo di 1
-    // nE = nPQTotientFi.divide(BigInteger.TWO);
-    // scelgo un intero E che sia primo e co-primo con carmicael 
     nE = nCarmichael.divide(BigInteger.TWO);
     if ( !nE.testBit(0))
       nE = nE.subtract(UNO);
-    //    stampaRis();
-    //    do {
-    //      nE = nE.subtract(BigInteger.TWO);
-    //      // mcd = igcd(nPQmodulus, nE);
-    //      // res = Gcd.gcd(nE, nPQTotientFi);
-    //      res = Gcd.gcd(nE, nCarmichael);
-    //      stampaRis();
-    //      System.out.println(res.toString());
-    //      // } while ( !mcd.equals(BigInteger.ONE));
-    //    } while ( !res.resto().equals(BigInteger.ONE));
     while (true) {
-      if (isPrimo(nE)) {
-        res = Gcd.gcd(nE, nCarmichael);
-        if (res.resto().equals(BigInteger.ONE))
-          break;
-      }
+      // if (isPrimo(nE)) {
+      nE = nE.nextProbablePrime();
+      res = Gcd.gcd(nE, nCarmichael);
+      if (res.resto().equals(BigInteger.ONE))
+        break;
+      // }
       nE = nE.add(BigInteger.TWO);
     }
     return nE;
@@ -142,6 +130,11 @@ public class RsaObj2 {
    * @return
    */
   private BigInteger calcolaD2() {
+    boolean bTest = false;
+    if ( !bTest) {
+      nD = nE.modInverse(nPQTotientFi);
+      return nD;
+    }
     NumberFormat fmt = NumberFormat.getIntegerInstance();
     BigInteger biRet = null;
     BigInteger[] biResto = { BigInteger.ZERO, UNO };
@@ -207,7 +200,7 @@ public class RsaObj2 {
   /**
    * Algoritmo di Euclide per trovare il Minimo Comun Divisore (MCD) fra due
    * numeri interi. L'implementazione utilizza l'iterazione invece della
-   * ricorsività.
+   * ricorsivit&agrave;.
    * 
    * @param p_a
    *          primo intero
@@ -224,6 +217,33 @@ public class RsaObj2 {
       p_b = r;
     }
     return p_a;
+  }
+
+  /**
+   * Costruisco un {@link BigInteger} che :
+   * <ol>
+   * <li>sar&agrave; lungo <code>qtaBits</code></li>
+   * <li>random setto i bits fino al raggiungimento della lunghezza</li>
+   * <li>l'eccezione che il bit <b>pi&ugrave;</b> significativo sar&agrave;
+   * comunque sempre a 1</li>
+   * <li>a questo punto chiedo il prox primo con
+   * {@link BigInteger#nextProbablePrime()}
+   * </ol>
+   * 
+   * @param qtaBits
+   *          lunghezza in bit del futuro BigInteger
+   * @return un <i>probable prime</i> di qtaBits di lunghezza
+   */
+  public static BigInteger creaGrandeNumeroPrimo(int qtaBits) {
+    Random rnd = new Random(new Date().getTime());
+    BigInteger bi = BigInteger.valueOf(0L);
+    bi = bi.setBit(qtaBits - 1);
+    for (int n = qtaBits - 2; n >= 0; n--) {
+      if ( (rnd.nextInt() & 1) != 0 || n == 0)
+        bi = bi.setBit(n);
+    }
+    bi = bi.nextProbablePrime();
+    return bi;
   }
 
   public boolean isPrimo(BigInteger p) {
@@ -261,188 +281,35 @@ public class RsaObj2 {
     return true;
   }
 
-  public BigInteger esponenteE(BigInteger p_val) {
-    return esponente(p_val, nE, nPQmodulus);
-  }
-
-  public BigInteger esponenteD(BigInteger p_val) {
-    return esponente(p_val, nD, nPQmodulus);
-  }
-
-  private BigInteger esponente(BigInteger p_val, BigInteger p_exp, BigInteger p_mod) {
-    BigInteger ris = p_val;
-    if (p_val.compareTo(p_mod) >= 0)
-      System.err.println("Val=" + p_val + "\t> PQ=" + p_mod);
-
-    arrExp = new BigInteger[MAX_BIT];
-    // genero l'esponente a modulo
-    arrExp[0] = p_val;
-    for (int i = 1; i < MAX_BIT; i++) {
-      // v(i) = v(i-1)^2 mod m
-      ris = ris.multiply(ris);
-      ris = ris.mod(p_mod);
-      arrExp[i] = ris;
-    }
-    ris = BigInteger.ONE;
-    for (int i = 0; i < MAX_BIT; i++) {
-      if (p_exp.testBit(i)) {
-        // CDbl(nRes) * CDbl(arExp(i)), CDbl(nMod)
-        ris = ris.multiply(arrExp[i]).mod(p_mod);
-      }
-    }
-    return ris;
+  /**
+   * La crittazione del messaggio <code>m</code> avviene com l'utilizzo della
+   * elevazione a potenza modulare i.e.<br/>
+   * <code>crit = m<sup>E</sup> mod (PQ)</code>
+   * 
+   * @param p_msg
+   *          messaggio in chiaro da crittare con il valore di E
+   * @return messaggio originale (decrittato)
+   */
+  public BigInteger esponenteE(BigInteger p_msg) {
+    return p_msg.modPow(nE, nPQmodulus);
   }
 
   /**
-   * Calcolare D tale che (DE - 1) &egrave; divisibile per (P-1)(Q-1) senza
-   * resto.<br/>
-   * I matematici scrivono questo come DE = 1 + (mod(P-1) (Q-1)).<br/>
-   * Si chiama D l'inverso moltiplicativo di E. Questo &egrave; facile da fare -
-   * semplicemente trovare un intero X che causa D = (X*(P-1)(Q-1) + 1) / E per
-   * essere un numero intero, quindi utilizzare tale valore di D
-   *
-   * @return
+   * La <b>de-</b>crittazione del messaggio <code>crit</code> avviene com
+   * l'utilizzo della elevazione a potenza modulare i.e.<br/>
+   * <code>m = crit<sup>D</sup> mod (PQ)</code>
+   * 
+   * @param p_crit
+   *          messaggio crittato con il valore di E
+   * @return messaggio originale (decrittato)
    */
-  /*-
-  @SuppressWarnings("unused")
-  private BigInteger calcolaD() {
-    // nPQm1 = (P-1)(Q-1)
-    boolean bGuess = true;
-    BigInteger biPQm1 = BigInteger.valueOf(m_nP - 1).multiply(BigInteger.valueOf(m_nQ - 1));
-    m_nD = BigInteger.ZERO;
-    BigInteger[] biResto = { BigInteger.ZERO, UNO };
-    m_nProbes = 1;
-    // ciclo fintanto che (k*(P-1)(Q-1)+1) / E da resto zero
-    while ( !biResto[1].equals(BigInteger.ZERO)) {
-      BigInteger k = BigInteger.valueOf(m_nProbes++);
-      // k*(P-1)(Q-1)+1) / E
-      biResto = k.multiply(biPQm1).add(UNO).divideAndRemainder(m_nE);
-      if ( !biResto[1].equals(BigInteger.ZERO) && bGuess)
-        m_nProbes = guessk(m_nProbes, biResto[1]);
-      System.out.printf("K=%d, prob=%d ( resto=%d)\n", k.longValue(), m_nProbes, biResto[1].longValue());
-    }
-    String sz = "Trovato al " + m_nProbes;
-    sz += " D=" + biResto[0].toString();
-    sz += " E/D=" + m_nE.divide(biResto[0]).toString();
-    log(sz);
-    m_nD = biResto[0];
-    return m_nD;
+  public BigInteger esponenteD(BigInteger p_crit) {
+    return p_crit.modPow(nD, nPQmodulus);
   }
-  */
-
-  /*-
-  private long guessk(long k, BigInteger resto) {
-    if (m_GuessKprev == null) {
-      m_GuessKprev = resto;
-      return k;
-    }
-    // crescita = delta(n+1)
-    BigInteger crescita = resto.subtract(m_GuessKprev);
-    if (crescita.compareTo(UNO) <= 0) {
-      m_GuessKprev = resto;
-      return k;
-    }
-    // dist E = E - resto
-    BigInteger dist = m_nE.subtract(resto);
-    double passiToE = dist.doubleValue() / crescita.doubleValue();
-    k += Double.valueOf(passiToE).longValue() - 1;
-    m_GuessKprev = null;
-    return k;
-  }
-  */
 
   private void log(String sz) {
     System.out.println(sz);
   }
-
-  /**
-   * <ol>
-   * <li>Scegli E tale che E è maggiore di 1,</li>
-   * <li>E è inferiore a PQ,</li>
-   * <li>ed E e (P-1)(Q-1) sono primi tra loro, il che significa che non hanno
-   * fattori primi in comune.</li>
-   * <li>E non deve essere primo, ma deve essere dispari.</li>
-   * </ol>
-   * (P-1) (Q-1) non può essere primo perché è un numero pari
-   */
-  /*-
-  @SuppressWarnings("unused")
-  private BigInteger calcolaE() {
-    m_nE = BigInteger.ZERO;
-    if ( (m_nP * m_nQ == 0) || (m_nP == m_nQ))
-      return m_nE;
-    m_nPQmodulus = BigInteger.valueOf(m_nP).multiply(BigInteger.valueOf(m_nQ));
-    m_nPQTotientFi = BigInteger.valueOf(m_nP - 1).multiply(BigInteger.valueOf(m_nQ - 1));
-    // nPQm1 e' pari
-    m_nE = m_nPQTotientFi.divide(DUE);
-    if ( (m_nE.intValue() & 1) == 0)
-      m_nE = m_nE.subtract(UNO);
-    while (m_nE.doubleValue() > 1) {
-      if (m_nE.isProbablePrime(2000))
-        break;
-      m_nE = m_nE.subtract(BigInteger.valueOf(2));
-    }
-    return m_nE;
-  }
-  */
-
-  /**
-   * Calcolare D tale che (DE - 1) &egrave; divisibile per (P-1)(Q-1) senza
-   * resto.<br/>
-   * I matematici scrivono questo come DE = 1 + (mod(P-1) (Q-1)).<br/>
-   * Si chiama D l'inverso moltiplicativo di E. Questo &egrave; facile da fare -
-   * semplicemente trovare un intero X che causa D = (X*(P-1)(Q-1) + 1) / E per
-   * essere un numero intero, quindi utilizzare tale valore di D
-   *
-   * @return
-   */
-  /*-
-  @SuppressWarnings("unused")
-  private BigInteger calcolaD() {
-    // nPQm1 = (P-1)(Q-1)
-    boolean bGuess = true;
-    BigInteger biPQm1 = BigInteger.valueOf(m_nP - 1).multiply(BigInteger.valueOf(m_nQ - 1));
-    m_nD = BigInteger.ZERO;
-    BigInteger[] biResto = { BigInteger.ZERO, UNO };
-    m_nProbes = 1;
-    // ciclo fintanto che (k*(P-1)(Q-1)+1) / E da resto zero
-    while ( !biResto[1].equals(BigInteger.ZERO)) {
-      BigInteger k = BigInteger.valueOf(m_nProbes++);
-      // k*(P-1)(Q-1)+1) / E
-      biResto = k.multiply(biPQm1).add(UNO).divideAndRemainder(m_nE);
-      if ( !biResto[1].equals(BigInteger.ZERO) && bGuess)
-        m_nProbes = guessk(m_nProbes, biResto[1]);
-      System.out.printf("K=%d, prob=%d ( resto=%d)\n", k.longValue(), m_nProbes, biResto[1].longValue());
-    }
-    String sz = "Trovato al " + m_nProbes;
-    sz += " D=" + biResto[0].toString();
-    sz += " E/D=" + m_nE.divide(biResto[0]).toString();
-    log(sz);
-    m_nD = biResto[0];
-    return m_nD;
-  }
-  */
-
-  /*-
-  private long guessk(long k, BigInteger resto) {
-    if (m_GuessKprev == null) {
-      m_GuessKprev = resto;
-      return k;
-    }
-    // crescita = delta(n+1)
-    BigInteger crescita = resto.subtract(m_GuessKprev);
-    if (crescita.compareTo(UNO) <= 0) {
-      m_GuessKprev = resto;
-      return k;
-    }
-    // dist E = E - resto
-    BigInteger dist = m_nE.subtract(resto);
-    double passiToE = dist.doubleValue() / crescita.doubleValue();
-    k += Double.valueOf(passiToE).longValue() - 1;
-    m_GuessKprev = null;
-    return k;
-  }
-  */
 
   public void stampaRis() {
     System.out.println("--------------------");

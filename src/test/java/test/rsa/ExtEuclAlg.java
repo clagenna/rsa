@@ -43,7 +43,7 @@ public class ExtEuclAlg {
 
     long Prim1 = 5_974_211L;
     long Prim2 = 11_555_651L;
-    long PrimX = 440_893L;
+    // long PrimX = 440_893L;
     long PrimY = 8_179_511L;
     a = Prim1 * PrimY;
     b = Prim2 * PrimY;

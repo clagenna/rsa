@@ -30,6 +30,7 @@ public class ProvaRec {
   private int[] y1;
   private int   k1;
 
+  @SuppressWarnings("unused")
   @Test
   public void provalo() {
     int v1 = 2 * 3 * 7 * 13;
@@ -49,17 +50,13 @@ public class ProvaRec {
     System.out.printf("r=%d\tx=%d\ty=%d\n", r, x1[k1], y1[k1]);
     int r2 = v1 * x1[k1] + v2 * y1[k1];
     System.out.printf("r=%d\tr2=%d\n", r, r2);
-    
-    
+
     x1[k1] = 1;
     y1[k1] = 1;
     r = gcdExtended(29, 7);
     System.out.printf("r=%d\tx=%d\ty=%d\n", r, x1[k1], y1[k1]);
     r2 = v1 * x1[k1] + v2 * y1[k1];
     System.out.printf("r=%d\tr2=%d\n", r, r2);
-
-    
-    
 
     //    RecGcd r12 = gcdExtended(v1, v2);
     //    System.out.println(r12.toString());
