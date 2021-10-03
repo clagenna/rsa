@@ -10,10 +10,11 @@ public class Gcd {
    * pagina</a><br/>
    *
    * L'algoritmo euclideo esteso &egrave; particolarmente utile quando
-   * <code>a</code> e <code>b</code> sono <b>coprimi</b> (o mcd &egrave; = 1)
+   * <code>a</code> e <code>b</code> sono <b>coprimi</b> (o mcd &egrave; = 1)<br/>
    * poiché <code>x</code> &egrave; l'inverso moltiplicativo modulare di
-   * "<code>a mod b</code>", e <code>y</code> &egrave; l'inverso moltiplicativo
-   * modulare di "<code>b mod a</code>". <br/>
+   * "<code>a mod b</code>", ergo <code>AX mod B = 1</code><br/>
+   *  e <code>y</code> &egrave; l'inverso moltiplicativo
+   * modulare di "<code>b mod a</code>", ergo <code>BY mod A = 1</code><br/>
    * Il calcolo dell'inverso moltiplicativo modulare &egrave; un passaggio
    * essenziale nel metodo di crittografia a chiave pubblica <b>RSA</b>.
    *

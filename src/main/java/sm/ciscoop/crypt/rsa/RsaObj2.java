@@ -45,12 +45,14 @@ public class RsaObj2 {
    * <li>Calcolo il modulus <code>N = P * Q</code></li>
    * <li>Inoltre calcolo il Totient
    * <code>&#x3C6;(n) = (P - 1) ( Q - 1)</code></li>
+   * <li>per scegliere E calcolo il <code>lcm(a,b)</code> (minimo comune multiplo) chiamato numero
+   * di Carmicael &#654;(N) = lcm(&#654;(P), &#654;(Q)) </li>
    * <li>Scelgo un numero <b>E</b> che sia :
-   * <code>1 &lt; E &lt; &#x3C6;(n)</code></li>
-   * <li>Inoltre E deve essere <b>co-primo</b> con <code>&#x3C6;(n)</code><br/>
+   * <code>1 &lt; E &lt; &#654;(N) </code></li>
+   * <li>Inoltre E deve essere <b>co-primo</b> con <code>&#654;(N)</code><br/>
    * Co-primo significa che <b>NON</b> condividono nessun fattore comune<br/>
    * in matematica si scrive<br/>
-   * <code>1 = gcd( E, &#632; ) </code></li>
+   * <code>gcd( E, &#654;(N) ) = 1</code></li>
    * </ol>
    * <h2>da Rsa.cpp</h2> Calcola <b>E</b> con il seguente algoritmo
    * <ul>

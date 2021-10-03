@@ -25,19 +25,27 @@ public class TestGCD {
     return new int[] { d, a, b };
   }
 
+  public int gcdr(int a, int b) {
+    if (b == 0)
+      return a;
+    return gcdr(b, a % b);
+  }
+
   public static void main(String[] args) {
     TestGCD app = new TestGCD();
     int p /* = Integer.parseInt(args[0]) */;
     int q /* = Integer.parseInt(args[1]) */;
     p = 1031;
     q = 1033;
-    p = 29;
+    p = 47;
     q = 31;
     if (p <= 0 || q <= 0)
       throw new IllegalArgumentException("p and q must be positive integers");
     int vals[] = app.gcd(p, q);
+    int ret = app.gcdr(p, q);
     System.out.println("gcd(" + p + ", " + q + ") = " + vals[0]);
     System.out.println(vals[1] + "(" + p + ") + " + vals[2] + "(" + q + ") = " + vals[0]);
+    System.out.println("gcdr(" + p + ", " + q + ") = " + ret);
 
     BigInteger bip = BigInteger.valueOf(29);
     BigInteger biq = BigInteger.valueOf(31);
