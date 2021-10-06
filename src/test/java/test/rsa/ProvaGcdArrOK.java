@@ -59,9 +59,17 @@ public class ProvaGcdArrOK {
         fmt.format(res.x()), //
         fmt.format(res.y()), //
         fmt.format(res2));
+
+//    res = Gcd.gcdnor(a, b);
+//    res2 = a.multiply(res.x()).add(b.multiply(res.y()));
+//    System.out.printf("gcdNoRec(%s, %s)=%s\tx=%s y=%s\tres2=%s\n", //
+//        fmt.format(a), //
+//        fmt.format(b), //
+//        fmt.format(res.resto()), //
+//        fmt.format(res.x()), //
+//        fmt.format(res.y()), //
+//        fmt.format(res2));
   }
-
-
 
   public long[] gcd(long a, long b) {
     if (b == 0)
