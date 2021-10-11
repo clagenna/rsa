@@ -47,6 +47,7 @@ public class NumTextField extends JFormattedTextField {
 
   private static final Color ERROR_BACKGROUND_COLOR = new Color(255, 215, 215);
   private static final Color ERROR_FOREGROUND_COLOR = new Color(192, 0, 0);
+  private static boolean     s_debug                = false;
 
   private Color              fBackground, fForeground;
   private String             name;
@@ -60,7 +61,7 @@ public class NumTextField extends JFormattedTextField {
     setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
     updateBackgroundOnEachUpdate();
     fBackground = Color.WHITE;
-    fForeground = Color.blue;
+    fForeground = Color.black;
     //improve the caret behavior
     //see also http://tips4java.wordpress.com/2010/02/21/formatted-text-field-tips/
     addFocusListener(new MousePositionCorrectorListener());
@@ -110,7 +111,8 @@ public class NumTextField extends JFormattedTextField {
         bRet = false;
       }
     }
-    System.out.printf("validContent:%s (%s)\n", txt, (bRet ? "" : "bad"));
+    if (s_debug)
+      System.out.printf("validContent:%s (%s)\n", txt, (bRet ? "" : "bad"));
     return bRet;
   }
 
@@ -123,7 +125,8 @@ public class NumTextField extends JFormattedTextField {
     boolean validValue = true;
     if (value == null || value instanceof Long)
       valore = (Long) value;
-    System.out.printf("setValue(\"%s\")\n", (value != null ? value.toString() : "*NULL*"));
+    if (s_debug)
+      System.out.printf("setValue(\"%s\")\n", (value != null ? value.toString() : "*NULL*"));
     //before setting the value, parse it by using the format
     try {
       AbstractFormatter formatter = getFormatter();
@@ -157,4 +160,7 @@ public class NumTextField extends JFormattedTextField {
     this.name = name;
   }
 
+  public static void setDebug(boolean bv) {
+    s_debug = bv;
+  }
 }

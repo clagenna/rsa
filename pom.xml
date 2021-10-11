@@ -1,12 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>sm.ciscoop</groupId>
 	<artifactId>rsa</artifactId>
 	<version>1.0</version>
 	<name>rsa Maven Jar</name>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<lo4j2.vers>2.14.0</lo4j2.vers>
@@ -18,7 +15,6 @@
 			<version>1.0</version>
 			<artifactId>absolutelayout</artifactId>
 		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -26,7 +22,6 @@
 			<version>1.18.16</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.jdesktop</groupId>
 			<version>1.0.3</version>
@@ -44,7 +39,6 @@
 			<artifactId>commons-cli</artifactId>
 			<version>1.4</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.jdom</groupId>
 			<artifactId>jdom</artifactId>
@@ -81,8 +75,10 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
-			<version>1.2.17</version> </dependency> -->
+		<!--
+ <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
+			<version>1.2.17</version> </dependency> 
+		-->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -93,9 +89,6 @@
 			<artifactId>log4j-core</artifactId>
 			<version>${lo4j2.vers}</version>
 		</dependency>
-
-
-
 	</dependencies>
 	<build>
 		<finalName>rsa</finalName>
