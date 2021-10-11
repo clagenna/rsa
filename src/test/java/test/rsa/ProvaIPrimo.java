@@ -8,7 +8,7 @@ import java.text.NumberFormat;
 
 import org.junit.Test;
 
-import sm.ciscoop.crypt.rsa.RsaObj2;
+import sm.clagenna.crypt.rsa.RsaObj2;
 
 public class ProvaIPrimo {
 

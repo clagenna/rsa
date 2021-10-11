@@ -1,4 +1,4 @@
-package sm.ciscoop.crypt.gcd;
+package sm.clagenna.crypt.gcd;
 
 import java.math.BigInteger;
 import java.text.NumberFormat;

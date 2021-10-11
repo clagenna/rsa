@@ -1,4 +1,4 @@
-package sm.ciscoop.crypt.view;
+package sm.clagenna.crypt.view;
 
 import java.awt.Color;
 import java.awt.event.FocusAdapter;

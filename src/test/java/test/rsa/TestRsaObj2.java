@@ -8,8 +8,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import sm.ciscoop.crypt.primi.PrimiFactory2;
-import sm.ciscoop.crypt.rsa.RsaObj2;
+import sm.clagenna.crypt.primi.PrimiFactory2;
+import sm.clagenna.crypt.rsa.RsaObj2;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestRsaObj2 {

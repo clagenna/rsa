@@ -1,4 +1,4 @@
-package sm.ciscoop.crypt.rsa;
+package sm.clagenna.crypt.rsa;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

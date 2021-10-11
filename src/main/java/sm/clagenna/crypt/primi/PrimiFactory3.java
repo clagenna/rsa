@@ -1,4 +1,4 @@
-package sm.ciscoop.crypt.primi;
+package sm.clagenna.crypt.primi;
 
 import java.math.BigInteger;
 import java.text.DecimalFormat;

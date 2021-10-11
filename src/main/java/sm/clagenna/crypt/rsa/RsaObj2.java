@@ -1,4 +1,4 @@
-package sm.ciscoop.crypt.rsa;
+package sm.clagenna.crypt.rsa;
 
 import java.math.BigInteger;
 import java.text.NumberFormat;
@@ -7,8 +7,8 @@ import java.util.Random;
 
 import lombok.Getter;
 import lombok.Setter;
-import sm.ciscoop.crypt.gcd.Gcd;
-import sm.ciscoop.crypt.gcd.GcdRec;
+import sm.clagenna.crypt.gcd.Gcd;
+import sm.clagenna.crypt.gcd.GcdRec;
 
 public class RsaObj2 {
   private static final BigInteger    UNO = BigInteger.ONE;

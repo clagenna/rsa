@@ -1,4 +1,4 @@
-package sm.ciscoop.crypt.view;
+package sm.clagenna.crypt.view;
 
 import java.awt.BorderLayout;
 
@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
-import sm.ciscoop.crypt.primi.PrimiFactory2;
+import sm.clagenna.crypt.primi.PrimiFactory2;
 
 public class JFrameRsa extends JFrame {
 

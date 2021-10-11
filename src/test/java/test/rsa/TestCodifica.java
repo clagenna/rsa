@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import sm.ciscoop.crypt.primi.PrimiFactory;
-import sm.ciscoop.crypt.rsa.CodeFrase;
-import sm.ciscoop.crypt.rsa.RsaObj;
+import sm.clagenna.crypt.primi.PrimiFactory;
+import sm.clagenna.crypt.rsa.CodeFrase;
+import sm.clagenna.crypt.rsa.RsaObj;
 
 
 public class TestCodifica {

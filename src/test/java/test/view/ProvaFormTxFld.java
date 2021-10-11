@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import sm.ciscoop.crypt.view.NumTextField;
+import sm.clagenna.crypt.view.NumTextField;
 
 public class ProvaFormTxFld extends JFrame {
 

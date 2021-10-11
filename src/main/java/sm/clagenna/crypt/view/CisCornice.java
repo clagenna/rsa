@@ -1,4 +1,4 @@
-package sm.ciscoop.crypt.view;
+package sm.clagenna.crypt.view;
 
 public interface CisCornice {
   public String m_szRes="Resources/";

@@ -1,10 +1,10 @@
-package sm.ciscoop.crypt.rsa;
+package sm.clagenna.crypt.rsa;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import sm.ciscoop.crypt.primi.PrimiFactory;
+import sm.clagenna.crypt.primi.PrimiFactory;
 
 public class RsaObj {
 

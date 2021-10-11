@@ -1,4 +1,4 @@
-package sm.ciscoop.crypt.util;
+package sm.clagenna.crypt.util;
 
 public class TimeExec {
   private long t1;

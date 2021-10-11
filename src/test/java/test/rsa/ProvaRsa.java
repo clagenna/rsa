@@ -2,8 +2,8 @@ package test.rsa;
 
 import org.junit.Test;
 
-import sm.ciscoop.crypt.primi.PrimiFactory;
-import sm.ciscoop.crypt.rsa.RsaObj;
+import sm.clagenna.crypt.primi.PrimiFactory;
+import sm.clagenna.crypt.rsa.RsaObj;
 
 public class ProvaRsa {
 

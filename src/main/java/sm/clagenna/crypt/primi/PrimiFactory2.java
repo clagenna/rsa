@@ -1,4 +1,4 @@
-package sm.ciscoop.crypt.primi;
+package sm.clagenna.crypt.primi;
 
 import java.math.BigInteger;
 import java.text.DecimalFormat;
@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.JProgressBar;
 
-import sm.ciscoop.crypt.gcd.Gcd;
+import sm.clagenna.crypt.gcd.Gcd;
 
 public class PrimiFactory2 {
   private static PrimiFactory2                                   s_inst;

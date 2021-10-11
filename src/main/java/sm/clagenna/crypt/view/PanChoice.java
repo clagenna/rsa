@@ -4,13 +4,13 @@
  * Created on __DATE__, __TIME__
  */
 
-package sm.ciscoop.crypt.view;
+package sm.clagenna.crypt.view;
 
 import java.awt.Cursor;
 import java.util.List;
 
-import sm.ciscoop.crypt.primi.PrimiFactory;
-import sm.ciscoop.crypt.rsa.RsaObj;
+import sm.clagenna.crypt.primi.PrimiFactory;
+import sm.clagenna.crypt.rsa.RsaObj;
 
 /**
  * 
@@ -45,17 +45,17 @@ public class PanChoice extends javax.swing.JPanel implements IRsa {
   private void initComponents() {
 
     panBottoni = new javax.swing.JPanel();
-    txMinPrimo = new sm.ciscoop.crypt.view.Ctx();
-    txQtaPrimi = new sm.ciscoop.crypt.view.Ctx();
-    txMaxPrimo = new sm.ciscoop.crypt.view.Ctx();
+    txMinPrimo = new sm.clagenna.crypt.view.Ctx();
+    txQtaPrimi = new sm.clagenna.crypt.view.Ctx();
+    txMaxPrimo = new sm.clagenna.crypt.view.Ctx();
     btGenPrimi = new javax.swing.JButton();
-    cbP = new sm.ciscoop.crypt.view.Cbx();
-    cbQ = new sm.ciscoop.crypt.view.Cbx();
-    txPQ = new sm.ciscoop.crypt.view.Ctx();
-    txE = new sm.ciscoop.crypt.view.Ctx();
-    txD = new sm.ciscoop.crypt.view.Ctx();
+    cbP = new sm.clagenna.crypt.view.Cbx();
+    cbQ = new sm.clagenna.crypt.view.Cbx();
+    txPQ = new sm.clagenna.crypt.view.Ctx();
+    txE = new sm.clagenna.crypt.view.Ctx();
+    txD = new sm.clagenna.crypt.view.Ctx();
     jButton1 = new javax.swing.JButton();
-    txProbes = new sm.ciscoop.crypt.view.Ctx();
+    txProbes = new sm.clagenna.crypt.view.Ctx();
 
     panBottoni.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -158,17 +158,17 @@ public class PanChoice extends javax.swing.JPanel implements IRsa {
   // GEN-BEGIN:variables
   // Variables declaration - do not modify
   private javax.swing.JButton       btGenPrimi;
-  private sm.ciscoop.crypt.view.Cbx cbP;
-  private sm.ciscoop.crypt.view.Cbx cbQ;
+  private sm.clagenna.crypt.view.Cbx cbP;
+  private sm.clagenna.crypt.view.Cbx cbQ;
   private javax.swing.JButton       jButton1;
   private javax.swing.JPanel        panBottoni;
-  private sm.ciscoop.crypt.view.Ctx txD;
-  private sm.ciscoop.crypt.view.Ctx txE;
-  private sm.ciscoop.crypt.view.Ctx txMaxPrimo;
-  private sm.ciscoop.crypt.view.Ctx txMinPrimo;
-  private sm.ciscoop.crypt.view.Ctx txPQ;
-  private sm.ciscoop.crypt.view.Ctx txProbes;
-  private sm.ciscoop.crypt.view.Ctx txQtaPrimi;
+  private sm.clagenna.crypt.view.Ctx txD;
+  private sm.clagenna.crypt.view.Ctx txE;
+  private sm.clagenna.crypt.view.Ctx txMaxPrimo;
+  private sm.clagenna.crypt.view.Ctx txMinPrimo;
+  private sm.clagenna.crypt.view.Ctx txPQ;
+  private sm.clagenna.crypt.view.Ctx txProbes;
+  private sm.clagenna.crypt.view.Ctx txQtaPrimi;
 
   // End of variables declaration//GEN-END:variables
 

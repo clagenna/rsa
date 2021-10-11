@@ -8,7 +8,7 @@ package test.view;
 
 import java.awt.BorderLayout;
 
-import sm.ciscoop.crypt.view.PanChoice;
+import sm.clagenna.crypt.view.PanChoice;
 
 /**
  * 

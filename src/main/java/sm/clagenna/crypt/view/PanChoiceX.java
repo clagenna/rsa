@@ -1,4 +1,4 @@
-package sm.ciscoop.crypt.view;
+package sm.clagenna.crypt.view;
 
 import java.awt.Cursor;
 import java.awt.GridBagConstraints;
@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-import sm.ciscoop.crypt.primi.PrimiFactory2;
+import sm.clagenna.crypt.primi.PrimiFactory2;
 
 public class PanChoiceX extends JPanel implements IRsa {
 

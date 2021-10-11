@@ -1,7 +1,7 @@
 /**
  * 
  */
-package sm.ciscoop.crypt.view;
+package sm.clagenna.crypt.view;
 
 import java.awt.Rectangle;
 import java.awt.Window;

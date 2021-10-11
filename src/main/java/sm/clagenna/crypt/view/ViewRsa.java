@@ -4,15 +4,15 @@
  * Created on __DATE__, __TIME__
  */
 
-package sm.ciscoop.crypt.view;
+package sm.clagenna.crypt.view;
 
 import java.awt.BorderLayout;
 import java.util.List;
 import java.util.Properties;
 
-import sm.ciscoop.crypt.rsa.CodeFrase;
-import sm.ciscoop.crypt.rsa.RsaObj;
-import sm.ciscoop.crypt.view.WindowState.IWinState;
+import sm.clagenna.crypt.rsa.CodeFrase;
+import sm.clagenna.crypt.rsa.RsaObj;
+import sm.clagenna.crypt.view.WindowState.IWinState;
 
 /**
  *
@@ -61,8 +61,8 @@ public class ViewRsa extends javax.swing.JFrame implements IRsa, IWinState {
     splKriDeco = new javax.swing.JSplitPane();
     panKript = new javax.swing.JPanel();
     panKriptBt = new javax.swing.JPanel();
-    txEncPQ1 = new sm.ciscoop.crypt.view.Ctx();
-    txEncD = new sm.ciscoop.crypt.view.Ctx();
+    txEncPQ1 = new sm.clagenna.crypt.view.Ctx();
+    txEncD = new sm.clagenna.crypt.view.Ctx();
     btEncode1 = new javax.swing.JButton();
     scrlKript = new javax.swing.JScrollPane();
     txKript = new javax.swing.JTextPane();
@@ -73,8 +73,8 @@ public class ViewRsa extends javax.swing.JFrame implements IRsa, IWinState {
     scrlClear = new javax.swing.JScrollPane();
     txClear = new javax.swing.JTextPane();
     panClearBt = new javax.swing.JPanel();
-    txEncPQ = new sm.ciscoop.crypt.view.Ctx();
-    txEncE = new sm.ciscoop.crypt.view.Ctx();
+    txEncPQ = new sm.clagenna.crypt.view.Ctx();
+    txEncE = new sm.clagenna.crypt.view.Ctx();
     btEncode = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -241,10 +241,10 @@ public class ViewRsa extends javax.swing.JFrame implements IRsa, IWinState {
   private javax.swing.JSplitPane    spltClear;
   private javax.swing.JTextPane     txClear;
   private javax.swing.JTextPane     txClearDeco;
-  private sm.ciscoop.crypt.view.Ctx txEncD;
-  private sm.ciscoop.crypt.view.Ctx txEncE;
-  private sm.ciscoop.crypt.view.Ctx txEncPQ;
-  private sm.ciscoop.crypt.view.Ctx txEncPQ1;
+  private sm.clagenna.crypt.view.Ctx txEncD;
+  private sm.clagenna.crypt.view.Ctx txEncE;
+  private sm.clagenna.crypt.view.Ctx txEncPQ;
+  private sm.clagenna.crypt.view.Ctx txEncPQ1;
   private javax.swing.JTextPane     txKript;
 
   // End of variables declaration//GEN-END:variables

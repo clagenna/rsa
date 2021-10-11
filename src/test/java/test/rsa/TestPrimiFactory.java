@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Test;
 
-import sm.ciscoop.crypt.primi.PrimiFactory;
+import sm.clagenna.crypt.primi.PrimiFactory;
 
 public class TestPrimiFactory {
 

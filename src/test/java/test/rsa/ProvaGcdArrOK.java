@@ -5,8 +5,8 @@ import java.text.NumberFormat;
 
 import org.junit.Test;
 
-import sm.ciscoop.crypt.gcd.Gcd;
-import sm.ciscoop.crypt.gcd.GcdRec;
+import sm.clagenna.crypt.gcd.Gcd;
+import sm.clagenna.crypt.gcd.GcdRec;
 
 public class ProvaGcdArrOK {
 

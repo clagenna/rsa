@@ -4,13 +4,13 @@
  * Created on __DATE__, __TIME__
  */
 
-package sm.ciscoop.crypt.view;
+package sm.clagenna.crypt.view;
 
 import java.awt.Cursor;
 import java.util.List;
 
-import sm.ciscoop.crypt.primi.PrimiFactory;
-import sm.ciscoop.crypt.rsa.RsaObj;
+import sm.clagenna.crypt.primi.PrimiFactory;
+import sm.clagenna.crypt.rsa.RsaObj;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -51,7 +51,7 @@ public class PanChoice2 extends javax.swing.JPanel implements IRsa {
     gbl_panBottoni.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
     gbl_panBottoni.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
     panBottoni.setLayout(gbl_panBottoni);
-    txMinPrimo = new sm.ciscoop.crypt.view.Ctx();
+    txMinPrimo = new sm.clagenna.crypt.view.Ctx();
     
         txMinPrimo.setLabel("Min Primo");
         GridBagConstraints gbc_txMinPrimo = new GridBagConstraints();
@@ -61,7 +61,7 @@ public class PanChoice2 extends javax.swing.JPanel implements IRsa {
         gbc_txMinPrimo.gridx = 0;
         gbc_txMinPrimo.gridy = 0;
         panBottoni.add(txMinPrimo, gbc_txMinPrimo);
-    txQtaPrimi = new sm.ciscoop.crypt.view.Ctx();
+    txQtaPrimi = new sm.clagenna.crypt.view.Ctx();
     
         txQtaPrimi.setLabel("Qta Primi");
         GridBagConstraints gbc_txQtaPrimi = new GridBagConstraints();
@@ -71,7 +71,7 @@ public class PanChoice2 extends javax.swing.JPanel implements IRsa {
         gbc_txQtaPrimi.gridx = 1;
         gbc_txQtaPrimi.gridy = 0;
         panBottoni.add(txQtaPrimi, gbc_txQtaPrimi);
-    txMaxPrimo = new sm.ciscoop.crypt.view.Ctx();
+    txMaxPrimo = new sm.clagenna.crypt.view.Ctx();
     
         txMaxPrimo.setLabel("Max Primo");
         GridBagConstraints gbc_txMaxPrimo = new GridBagConstraints();
@@ -96,7 +96,7 @@ public class PanChoice2 extends javax.swing.JPanel implements IRsa {
         gbc_btGenPrimi.gridx = 3;
         gbc_btGenPrimi.gridy = 0;
         panBottoni.add(btGenPrimi, gbc_btGenPrimi);
-    cbP = new sm.ciscoop.crypt.view.Cbx();
+    cbP = new sm.clagenna.crypt.view.Cbx();
     
         cbP.setLabel("Val P");
         cbP.setName("P");
@@ -107,7 +107,7 @@ public class PanChoice2 extends javax.swing.JPanel implements IRsa {
         gbc_cbP.gridx = 0;
         gbc_cbP.gridy = 1;
         panBottoni.add(cbP, gbc_cbP);
-    cbQ = new sm.ciscoop.crypt.view.Cbx();
+    cbQ = new sm.clagenna.crypt.view.Cbx();
     
         cbQ.setLabel("Val Q");
         cbQ.setName("Q");
@@ -118,7 +118,7 @@ public class PanChoice2 extends javax.swing.JPanel implements IRsa {
         gbc_cbQ.gridx = 1;
         gbc_cbQ.gridy = 1;
         panBottoni.add(cbQ, gbc_cbQ);
-    txPQ = new sm.ciscoop.crypt.view.Ctx();
+    txPQ = new sm.clagenna.crypt.view.Ctx();
     
         txPQ.setLabel("PQ");
         GridBagConstraints gbc_txPQ = new GridBagConstraints();
@@ -128,7 +128,7 @@ public class PanChoice2 extends javax.swing.JPanel implements IRsa {
         gbc_txPQ.gridx = 2;
         gbc_txPQ.gridy = 1;
         panBottoni.add(txPQ, gbc_txPQ);
-    txE = new sm.ciscoop.crypt.view.Ctx();
+    txE = new sm.clagenna.crypt.view.Ctx();
     
         txE.setLabel("Val E");
         GridBagConstraints gbc_txE = new GridBagConstraints();
@@ -138,7 +138,7 @@ public class PanChoice2 extends javax.swing.JPanel implements IRsa {
         gbc_txE.gridx = 0;
         gbc_txE.gridy = 2;
         panBottoni.add(txE, gbc_txE);
-    txD = new sm.ciscoop.crypt.view.Ctx();
+    txD = new sm.clagenna.crypt.view.Ctx();
     
         txD.setLabel("Val D");
         GridBagConstraints gbc_txD = new GridBagConstraints();
@@ -148,7 +148,7 @@ public class PanChoice2 extends javax.swing.JPanel implements IRsa {
         gbc_txD.gridx = 1;
         gbc_txD.gridy = 2;
         panBottoni.add(txD, gbc_txD);
-    txProbes = new sm.ciscoop.crypt.view.Ctx();
+    txProbes = new sm.clagenna.crypt.view.Ctx();
     
         txProbes.setLabel("Probes");
         GridBagConstraints gbc_txProbes = new GridBagConstraints();
@@ -227,17 +227,17 @@ public class PanChoice2 extends javax.swing.JPanel implements IRsa {
   // GEN-BEGIN:variables
   // Variables declaration - do not modify
   private javax.swing.JButton       btGenPrimi;
-  private sm.ciscoop.crypt.view.Cbx cbP;
-  private sm.ciscoop.crypt.view.Cbx cbQ;
+  private sm.clagenna.crypt.view.Cbx cbP;
+  private sm.clagenna.crypt.view.Cbx cbQ;
   private javax.swing.JButton       jButton1;
   private javax.swing.JPanel        panBottoni;
-  private sm.ciscoop.crypt.view.Ctx txD;
-  private sm.ciscoop.crypt.view.Ctx txE;
-  private sm.ciscoop.crypt.view.Ctx txMaxPrimo;
-  private sm.ciscoop.crypt.view.Ctx txMinPrimo;
-  private sm.ciscoop.crypt.view.Ctx txPQ;
-  private sm.ciscoop.crypt.view.Ctx txProbes;
-  private sm.ciscoop.crypt.view.Ctx txQtaPrimi;
+  private sm.clagenna.crypt.view.Ctx txD;
+  private sm.clagenna.crypt.view.Ctx txE;
+  private sm.clagenna.crypt.view.Ctx txMaxPrimo;
+  private sm.clagenna.crypt.view.Ctx txMinPrimo;
+  private sm.clagenna.crypt.view.Ctx txPQ;
+  private sm.clagenna.crypt.view.Ctx txProbes;
+  private sm.clagenna.crypt.view.Ctx txQtaPrimi;
 
   // End of variables declaration//GEN-END:variables
 
