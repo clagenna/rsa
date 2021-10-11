@@ -20,6 +20,8 @@ public class GcdMain {
   private static final String P2     = "p";
   private static final String Q2     = "q";
   private static final String D2     = "d";
+  private static final String GCD    = "gcd";
+  private static final String LCM    = "lcm";
 
   private static GcdMain      s_inst;
 
@@ -28,6 +30,7 @@ public class GcdMain {
   @Getter private BigInteger  p;
   @Getter private BigInteger  q;
   private CommandLine         cmd;
+  private String              tipo;
 
   public GcdMain() {
     if (s_inst != null)
@@ -50,16 +53,26 @@ public class GcdMain {
   private void doTheJob() {
     if (cmd.hasOption(DEBUG2))
       Gcd.setDebug(true);
-    GcdRec res = Gcd.gcd(p, q);
-    BigInteger res2 = p.multiply(res.x()).add(q.multiply(res.y()));
+    GcdRec res = null;
     NumberFormat fmt = NumberFormat.getIntegerInstance();
-    System.out.printf("gcdBI(%s, %s)=%s\tx=%s y=%s\tBezout=%s\n", //
-        fmt.format(p), //
-        fmt.format(q), //
-        fmt.format(res.resto()), //
-        fmt.format(res.x()), //
-        fmt.format(res.y()), //
-        fmt.format(res2));
+    if (tipo.equals(GCD)) {
+      res = Gcd.gcd(p, q);
+      BigInteger res2 = p.multiply(res.x()).add(q.multiply(res.y()));
+      System.out.printf("gcd(%s, %s)=%s\tx=%s y=%s\tBezout=%s\n", //
+          fmt.format(p), //
+          fmt.format(q), //
+          fmt.format(res.resto()), //
+          fmt.format(res.x()), //
+          fmt.format(res.y()), //
+          fmt.format(res2));
+    } else {
+      BigInteger ii = Gcd.lcm(p, q);
+      System.out.printf("Min. Com. Mul (%s,%s)=%s\n", //
+          fmt.format(p), //
+          fmt.format(q), //
+          fmt.format(ii) //
+      );
+    }
 
     //    res = Gcd.gcdnor(p, q);
     //    res2 = p.multiply(res.x()).add(q.multiply(res.y()));
@@ -93,6 +106,21 @@ public class GcdMain {
         .desc("Il secondo numero primo (q)") //
         .build();
     opts.addOption(opt);
+
+    // -mcm
+    opt = Option.builder(GCD) //
+
+        .desc("Massimo Comun Divisore") //
+        .build();
+    opts.addOption(opt);
+
+    // -mcm
+    opt = Option.builder(LCM) //
+
+        .desc("Minimo Comune multiplo") //
+        .build();
+    opts.addOption(opt);
+
     // --debug
     opt = Option.builder(D2) //
         .longOpt(DEBUG2) //
@@ -105,6 +133,7 @@ public class GcdMain {
   private void parseOptions(String[] args) {
     CommandLineParser parse = new DefaultParser();
     HelpFormatter helper = new HelpFormatter();
+    tipo = GCD;
     p = null;
     q = null;
 
@@ -122,6 +151,10 @@ public class GcdMain {
         szQ = szQ.replace("_", "");
         q = new BigInteger(szQ);
       }
+      if (cmd.hasOption(GCD))
+        tipo = GCD;
+      if (cmd.hasOption(LCM))
+        tipo = LCM;
     } catch (NumberFormatException | ParseException e) {
       System.out.println("Errore:" + e.getMessage());
     }

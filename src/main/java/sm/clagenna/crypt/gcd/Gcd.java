@@ -8,7 +8,19 @@ public class Gcd {
   private static boolean debug;
 
   public Gcd() {
-    // 
+    //
+  }
+
+  /**
+   * Sinonimo per {@link gcd} (da inglese <i>Greatest common divisors</i> ) ma
+   * in italiano <i><b>m</b>assimo <b>c</b>omun <b>d</b>ivisore</i>
+   * 
+   * @param a
+   * @param b
+   * @return
+   */
+  public static GcdRec mcd(BigInteger a, BigInteger b) {
+    return gcd(a, b);
   }
 
   /**
@@ -30,8 +42,8 @@ public class Gcd {
    * <code>y<sub>i</sub> = x<sub>i-1</sub> - a / b * y<sub>i-1</sub></code></br>
    * ergo:<br/>
    * <code>y<sub>i</sub> = x<sub>i-1</sub> - a / b * x<sub>i</sub></code>
-   * 
-   * 
+   *
+   *
    *
    * @param a
    *          primo intero
@@ -53,10 +65,21 @@ public class Gcd {
                 .multiply(x) //
         );
     if (Gcd.isDebug())
-      printGcd(a, b, d, x, y);
+      Gcd.printGcd(a, b, d, x, y);
     return new GcdRec(d, x, y);
   }
 
+  /**
+   * vedi {@link gcd} per la spiegazione. questa è fatta in forma <b>non</b>
+   * ricorsiva
+   *
+   * @param p_a
+   *          primo intero
+   * @param p_b
+   *          secondo intero
+   * @return un record {@link GcdRec} che contiene il resto e i due valori di x
+   *         e y
+   */
   public static GcdRec gcdnor(BigInteger p_a, BigInteger p_b) {
     BigInteger a = p_a, b = p_b;
     if (b == null || b.signum() == 0)
@@ -84,7 +107,7 @@ public class Gcd {
     }
     GcdRec ret = new GcdRec(a, unPrev, vnPrev);
     if (Gcd.isDebug())
-      printGcd(p_a, p_b, ret.resto(), ret.x(), ret.y());
+      Gcd.printGcd(p_a, p_b, ret.resto(), ret.x(), ret.y());
     return ret;
   }
 
@@ -121,7 +144,8 @@ public class Gcd {
   }
 
   /**
-   * Cerca il minimo comune multiplo fra due interi
+   * Cerca il minimo comune multiplo fra due interi</br>
+   * <code>mcm = ( a / (mcd(a,b) ) * b</code>
    *
    * @param a
    * @param b
