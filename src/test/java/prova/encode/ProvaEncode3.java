@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.logging.log4j.core.config.plugins.convert.TypeConverters.BigIntegerConverter;
 import org.junit.Test;
 
 import sm.clagenna.crypt.rsa.RsaObj;
@@ -42,6 +43,12 @@ public class ProvaEncode3 {
   }
 
   private void codificaStringa() {
+    BigInteger a1 = BigInteger.valueOf(121);
+    BigInteger a2 = rsa.esponenteE(a1);
+    BigInteger a3 = rsa.esponenteD(a2);
+    if (a1.equals(a3))
+      System.out.println("ProvaEncode3.codificaStringa()");
+
     String ptf = "%d) %10s:%s\n";
     String sz = "claudio gennari";
     DeCodeString deco = new DeCodeString();
@@ -61,6 +68,9 @@ public class ProvaEncode3 {
     for (BigInteger bi : li) {
       bi = rsa.esponenteE(bi);
       li2.add(bi);
+      BigInteger bi2 = rsa.esponenteD(bi);
+      if ( !bi.equals(bi2))
+        System.out.println("Sono diversi !");
       System.out.printf(ptf, k, "rsaE", s_fmt.format(bi));
     }
     // 3) list2(BigInt) => deco() => sz2

@@ -1,30 +1,26 @@
-package prova.swing;
+package test.swing;
 
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.math.BigInteger;
-import java.text.NumberFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import sm.clagenna.crypt.swing.NumTextField;
 
-public class ProvaNumTextField extends JFrame {
+public class ProvaNumTextFld extends JFrame {
 
-  /** long serialVersionUID */
-  private static final long serialVersionUID = -5585882485387235481L;
+  /** serialVersionUID */
+  private static final long serialVersionUID = -3262198056820646697L;
   private JPanel            contentPane;
-  private NumTextField      txNumText;
+  private JTextField        textField;
 
   /**
    * Launch the application.
@@ -34,7 +30,7 @@ public class ProvaNumTextField extends JFrame {
       @Override
       public void run() {
         try {
-          ProvaNumTextField frame = new ProvaNumTextField();
+          ProvaNumTextFld frame = new ProvaNumTextFld();
           frame.setVisible(true);
         } catch (Exception e) {
           e.printStackTrace();
@@ -46,7 +42,7 @@ public class ProvaNumTextField extends JFrame {
   /**
    * Create the frame.
    */
-  public ProvaNumTextField() {
+  public ProvaNumTextFld() {
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     setBounds(100, 100, 450, 300);
     contentPane = new JPanel();
@@ -67,39 +63,20 @@ public class ProvaNumTextField extends JFrame {
     gbc_lblNewLabel.gridy = 0;
     contentPane.add(lblNewLabel, gbc_lblNewLabel);
 
-    txNumText = new NumTextField("valore");
-    GridBagConstraints gbc_txNumText = new GridBagConstraints();
-    gbc_txNumText.insets = new Insets(0, 0, 0, 5);
-    gbc_txNumText.fill = GridBagConstraints.HORIZONTAL;
-    gbc_txNumText.gridx = 1;
-    gbc_txNumText.gridy = 0;
-    contentPane.add(txNumText, gbc_txNumText);
-    txNumText.setColumns(10);
+    textField = new NumTextField("provalo");
+    GridBagConstraints gbc_textField = new GridBagConstraints();
+    gbc_textField.insets = new Insets(0, 0, 0, 5);
+    gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+    gbc_textField.gridx = 1;
+    gbc_textField.gridy = 0;
+    contentPane.add(textField, gbc_textField);
+    textField.setColumns(10);
 
-    JButton btnNewButton = new JButton("Prova");
-    btnNewButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        emettiMsg();
-      }
-    });
+    JButton btnNewButton = new JButton("New button");
     GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
     gbc_btnNewButton.gridx = 2;
     gbc_btnNewButton.gridy = 0;
     contentPane.add(btnNewButton, gbc_btnNewButton);
-  }
-
-  protected void emettiMsg() {
-    BigInteger bi = (BigInteger) txNumText.getValue();
-    String msg = "valore= *NULL*";
-    if (bi != null)
-      msg = "Valore=" + NumberFormat.getIntegerInstance().format(bi);
-    JOptionPane.showConfirmDialog(this, //
-        msg, //
-        "Valore del textBox", //
-        JOptionPane.OK_OPTION//
-    );
-
   }
 
 }
