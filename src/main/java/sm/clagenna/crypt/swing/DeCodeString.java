@@ -10,6 +10,7 @@ public class DeCodeString {
   private int        maxBit = 128;
   private int        shift  = 7;
   private BigInteger b127   = BigInteger.valueOf(127);
+  private BigInteger maxVal;
 
   public List<BigInteger> codifica(String sz) {
     sz = Base64.encodeBase64String(sz.getBytes());
@@ -21,9 +22,12 @@ public class DeCodeString {
       if (k > maxBit) {
         li.add(bi);
         bi = BigInteger.ZERO;
-        k = 0;
+        k = shift;
       }
       bi = bi.shiftLeft(shift).add(BigInteger.valueOf(cc & 127));
+      if (maxVal != null && maxVal.signum() > 0)
+        if (bi.compareTo(maxVal) > 0)
+          System.out.println("DeCodeString Superato il valore !");
     }
     if (bi.signum() > 0)
       li.add(bi);
@@ -59,6 +63,10 @@ public class DeCodeString {
     if (p_b64 == null || p_b64.length() == 0)
       return null;
     return new String(Base64.decodeBase64(p_b64.getBytes()));
+  }
+
+  public void setMaxVal(BigInteger p_v) {
+    maxVal = p_v;
   }
 
 }
