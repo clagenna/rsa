@@ -7,13 +7,17 @@ import java.util.List;
 import org.apache.commons.codec.binary.Base64;
 
 public class DeCodeString {
-  private int        maxBit = 128;
-  private int        shift  = 7;
-  private BigInteger b127   = BigInteger.valueOf(127);
+  private int        maxBit  = 128;
+  private int        shift   = 7;
+  private BigInteger maskBit = BigInteger.valueOf(127);
   private BigInteger maxVal;
 
+  public List<BigInteger> toList(String sz) {
+    return codifica(sz);
+  }
+
   public List<BigInteger> codifica(String sz) {
-    sz = Base64.encodeBase64String(sz.getBytes());
+    // sz = Base64.encodeBase64String(sz.getBytes());
     BigInteger bi = BigInteger.ZERO;
     List<BigInteger> li = new ArrayList<BigInteger>();
     int k = 0;
@@ -24,33 +28,73 @@ public class DeCodeString {
         bi = BigInteger.ZERO;
         k = shift;
       }
-      bi = bi.shiftLeft(shift).add(BigInteger.valueOf(cc & 127));
+      char canded = (char) (cc & maskBit.intValue());
+      if (cc > maskBit.intValue()) {
+        System.out.printf("codifica(%d)=%c\n", (int) cc, cc);
+        canded = changeChar(cc);
+      }
+
+      bi = bi.shiftLeft(shift).add(BigInteger.valueOf(canded));
       if (maxVal != null && maxVal.signum() > 0)
         if (bi.compareTo(maxVal) > 0)
-          System.out.println("DeCodeString Superato il valore !");
+          throw new UnsupportedOperationException("DeCodeString Superato il valore !");
     }
     if (bi.signum() > 0)
       li.add(bi);
     return li;
   }
 
+  private char changeChar(char cc) {
+    char ret = cc;
+    switch (cc) {
+      case 8211: //
+        ret = '-';
+        break;
+      default:
+        ret = '#';
+        break;
+    }
+    return ret;
+  }
+
+  public String toString(List<BigInteger> li) {
+    return decodi(li);
+  }
+
   public String decodi(List<BigInteger> li) {
     StringBuilder sb = new StringBuilder();
+
     for (BigInteger bi : li) {
-      int k = 0;
-      while (k <= maxBit && bi.signum() > 0) {
-        char cc = (char) bi.and(b127).intValue();
-        sb.insert(0, cc);
-        bi = bi.shiftRight(shift);
-        k -= shift;
+      // int k = 0;
+      StringBuilder sb2 = new StringBuilder();
+      int lsh = shift;
+      while (/* k <= maxBit && */ bi.signum() > 0) {
+        char cc = (char) bi.and(maskBit).intValue();
+        sb2.insert(0, cc);
+        lsh = bi.bitLength() > shift ? shift : bi.bitLength();
+        bi = bi.shiftRight(lsh);
+        // k += lsh;
       }
+      sb.append(sb2);
     }
     String sz = sb.toString();
     return sz;
   }
 
+  public void setMaxBits(int p_mb) {
+    if (p_mb < 7 || p_mb > 128)
+      throw new UnsupportedOperationException("maxBit Fuoi range 7-128");
+    maxBit = p_mb;
+    maxVal = BigInteger.ZERO.setBit(maxBit).subtract(BigInteger.ONE);
+  }
+
   public void setMaxBits(BigInteger p_modulus) {
     maxBit = p_modulus.bitLength() - 1;
+    maxVal = BigInteger.ZERO.setBit(maxBit).subtract(BigInteger.ONE);
+  }
+
+  public int getMaxBits() {
+    return maxBit;
   }
 
   public String toBase64(String p_sz) {
@@ -67,6 +111,17 @@ public class DeCodeString {
 
   public void setMaxVal(BigInteger p_v) {
     maxVal = p_v;
+  }
+
+  public int getShift() {
+    return shift;
+  }
+
+  public void setShift(int p_v) {
+    if (p_v < 6 || p_v > 16)
+      throw new UnsupportedOperationException("Shift esagerato(6-16):" + p_v);
+    shift = p_v;
+    maskBit = BigInteger.ZERO.setBit(p_v).subtract(BigInteger.ONE);
   }
 
 }

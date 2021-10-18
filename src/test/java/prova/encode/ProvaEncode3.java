@@ -3,7 +3,10 @@ package prova.encode;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.OptionalInt;
 
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
@@ -21,8 +24,14 @@ public class ProvaEncode3 {
   @Test
   public void provaRsaObj() {
     creaRsa();
-    trovaUltimoValore();
-    String szEnc = codificaStringa();
+    deco = new DeCodeString();
+    deco.setMaxBits(rsa.getNPQTotientFi());
+    deco.setMaxVal(rsa.getNPQTotientFi().subtract(BigInteger.ONE));
+    deco.setShift(8);
+
+    String sz = "Gennari Claudio";
+    // trovaUltimoValore();
+    String szEnc = codificaStringa(sz);
     String szDeco = decodificaStringa(szEnc);
     System.out.println("ProvaEncode3.Decode=" + szDeco);
   }
@@ -45,6 +54,7 @@ public class ProvaEncode3 {
     rsa.stampaRis();
   }
 
+  @SuppressWarnings("unused")
   private void trovaUltimoValore() {
     BigInteger bi = BigInteger.ZERO;
     BigInteger bi2;
@@ -76,28 +86,32 @@ public class ProvaEncode3 {
     System.out.println("MaxVal:" + s_fmt.format(lastOk));
   }
 
-  private String codificaStringa() {
+  @SuppressWarnings("unused")
+  private String codificaStringa(String sz) {
     BigInteger a1 = BigInteger.valueOf(121);
     BigInteger a2 = rsa.esponenteE(a1);
     BigInteger a3 = rsa.esponenteD(a2);
     if ( !a1.equals(a3))
       throw new UnsupportedOperationException("ProvaEncode3.codificaStringa( a1 != a3)");
 
-    String sz = "claudio gennari";
-    deco = new DeCodeString();
-    deco.setMaxBits(rsa.getNPQTotientFi());
-    deco.setMaxVal(rsa.getNPQTotientFi().add(BigInteger.valueOf( -1)));
     // sz => base64
     String sz1 = deco.toBase64(sz);
+    String szx = deco.fromBase64(sz1);
     int k = 1;
     System.out.printf(ptf, k++, "sorg", sz);
+    System.out.println();
     System.out.printf(ptf, k++, "base64", sz1);
+    System.out.println();
+
     // 1) base64 => codi() => list(BigInt)
     List<BigInteger> li = deco.codifica(sz1);
+    szx = deco.decodi(li);
     final int q = k;
     li.stream().forEach(s -> System.out.printf(ptf, q, "deco", s_fmt.format(s)));
+    System.out.println();
     k++;
     List<BigInteger> li2 = new ArrayList<>();
+
     // 2) list(BigInt) => RSA.E => list2(BigInt)
     for (BigInteger bi : li) {
       BigInteger bi1 = rsa.esponenteE(bi);
@@ -105,10 +119,32 @@ public class ProvaEncode3 {
       BigInteger bi2 = rsa.esponenteD(bi1);
       if ( !bi.equals(bi2))
         System.out.println("Sono diversi !");
-      System.out.printf(ptf, k, "rsaE", s_fmt.format(bi));
     }
+    final int q2 = k;
+    li2.stream().forEach(s -> System.out.printf(ptf, q2, "rsaE", s_fmt.format(s)));
+    System.out.println();
+
+    //     Integer maxL2 = li2 //
+    //            .stream() //
+    //            .max(Comparator.comparing(s -> s.bitLength())) //
+    //            .orElseThrow(NoSuchElementException::new);
+
     // 3) list2(BigInt) => deco() => sz2
+    OptionalInt ii = li2.stream().mapToInt(BigInteger::bitLength).max();
+    System.out.println("li2.MaxBitLength=" + ii.getAsInt());
     String sz2 = deco.decodi(li2);
+    List<BigInteger> li3 = deco.codifica(sz2);
+    /**
+     * dopo la crittazione ho numeri alti in li2, (da 21.042 passo a 813.279 )
+     * anche se minori di Fi ( 949.248 ) eppure la decodifica non riporta alla
+     * lista. Provato con @{link ProvaSeqX}
+     */
+    // ---------------------------------------------------------------------------------
+    // cerco la BitMaxLength in li2
+
+    if (li2.size() != li3.size())
+      System.out.printf("codificaStringa(li2 %d !=  li3 %d\n", li2.size(), li3.size());
+    // ---------------------------------------------------------------------------------
     System.out.printf(ptf, k++, "encoRSA", sz2);
     // 4) sz2 => Base64
     sz2 = Base64.encodeBase64String(sz2.getBytes());
@@ -125,22 +161,32 @@ public class ProvaEncode3 {
   }
 
   private String decodificaStringa(String szEnc) {
+    System.out.println();
+    int k = 5;
     // 5) tolgo i CR LF
     String sz1 = szEnc.replace("\n", "");
+    System.out.printf(ptf, k--, "B64encoRSA", sz1);
     // 4) riporto la Base64 a elenco di chars encoded
     String sz2 = new String(Base64.decodeBase64(sz1.getBytes()));
-    // 3) creo il elenco di BigInt
+    System.out.printf(ptf, k--, "encoRSA", sz2);
+    // 3) creo elenco di BigInt
+    final int q = k;
     List<BigInteger> li = deco.codifica(sz2);
+    li.stream().forEach(s -> System.out.printf(ptf, q, "RsaE", s_fmt.format(s)));
+    k--;
     // 2) decodifica dei BigInt tramite RSA
-    int k = 2;
-    List<BigInteger> li2 = new ArrayList<BigInteger>(); 
+    List<BigInteger> li2 = new ArrayList<BigInteger>();
     for (BigInteger bi : li) {
       BigInteger bi1 = rsa.esponenteD(bi);
       li2.add(bi1);
       System.out.printf(ptf, k, "rsaD", s_fmt.format(bi1));
     }
+    final int p = k;
+    li.stream().forEach(s -> System.out.printf(ptf, p, "decoRSA", s_fmt.format(s)));
+    k--;
     // 1) ritorno alla stringa orig
     String sz3 = deco.decodi(li2);
+    System.out.printf(ptf, k, " final", sz3);
     return sz3;
   }
 }

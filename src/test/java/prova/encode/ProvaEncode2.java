@@ -8,8 +8,11 @@ import org.junit.Test;
 import sm.clagenna.crypt.swing.DeCodeString;
 
 public class ProvaEncode2 {
-  int maxBit = 128;
-  int shift  = 7;
+  private static final String CSZ_COMPLEX = "Gennari\nclaudio\nProva Æ Œ Ψ " //
+      + "\r\nIGNORE – drop the erroneous input\r\n" //
+      + "REPLACE – replace the erroneous input\r\n" //
+      + "REPORT – report the error by returning a CoderResult object or throwing a CharacterCodingException\n" //
+      + "Hello ਸੰਸਾਰ!";
 
   @Test
   public void provalo() {
@@ -19,22 +22,24 @@ public class ProvaEncode2 {
     String sz2 = deco.decodi(li);
     System.out.println(" In:" + sz);
     System.out.println("Out:" + sz2);
+  }
 
-    li = deco.codifica(sz);
-    sz2 = deco.decodi(li);
+  @Test
+  public void provalo2() {
+    DeCodeString deco = new DeCodeString();
+    deco.setMaxBits(10);
+    deco.setShift(8);
+    doDeco(deco, CSZ_COMPLEX);
 
-    System.out.println(" In64:" + sz);
-    System.out.println("Out64:" + sz2);
+    deco.setMaxBits(32);
+    deco.setShift(8);
+    doDeco(deco, CSZ_COMPLEX);
+  }
 
-    sz = "Gennari\nclaudio\nProva Æ Œ Ψ ";
-    sz += "IGNORE – drop the erroneous input\r\n" //
-        + "REPLACE – replace the erroneous input\r\n" //
-        + "REPORT – report the error by returning a CoderResult object or throwing a CharacterCodingException\n";
-    sz += "Hello ਸੰਸਾਰ!";
-    li = deco.codifica(sz);
-    sz2 = deco.decodi(li);
-
-    System.out.println(" InLu:" + sz);
-    System.out.println("OutLu:" + sz2);
+  private void doDeco(DeCodeString deco, String sz) {
+    System.out.printf("\n InLu: shift=%d, bits=%d\n%s", deco.getShift(), deco.getMaxBits(), sz);
+    List<BigInteger> li = deco.codifica(sz);
+    String sz2 = deco.decodi(li);
+    System.out.printf("\nOutLu:li=%d\n%s\n", li.size(), sz2);
   }
 }

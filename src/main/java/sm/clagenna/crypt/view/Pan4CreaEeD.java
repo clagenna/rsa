@@ -243,6 +243,7 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
       BigInteger ritor = rsa.esponenteD(verso);
       NumberFormat fmt = NumberFormat.getInstance();
       System.out.printf("Con %s ==> %s ==> %s\n", fmt.format(probe), fmt.format(verso), fmt.format(ritor));
+      rsa.stampaRis();
 
     } finally {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

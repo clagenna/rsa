@@ -6,6 +6,7 @@ import java.awt.Insets;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -25,11 +26,17 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
   private static final long                serialVersionUID = 593767533148741772L;
   @SuppressWarnings("unused") private IRsa m_irsa;
   private JTextArea                        txTxtEncoded;
+  private int                              maxBitsCry;
+  private List<BigInteger>                 liUnoCripted;
+  private List<BigInteger>                 liUnoTxt;
+  private List<BigInteger>                 liDueCrypted;
+  private List<BigInteger>                 liDueTxt;
 
   /**
    * Create the panel.
    */
   public Pan6TxtCoded() {
+    Controllore.getInst().addListener(this);
     initComponents();
   }
 
@@ -80,49 +87,66 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
     RsaObj rsa = MainFrame.getInst().getRsaObj();
     DeCodeString deco = new DeCodeString();
     deco.setMaxBits(rsa.getNPQmodulus());
-    // 1) sz => codi() => list(BigInt)  
-    List<BigInteger> li = deco.codifica(val);
-    List<BigInteger> li2 = new ArrayList<>();
-    // 2) list(BigInt) => RSA.E => list2(BigInt)
-    for (BigInteger bi : li) {
+    int shift = 8;
+    deco.setShift(shift);
+
+    liUnoTxt = deco.toList(val);
+
+    liUnoCripted = new ArrayList<>();
+    for (BigInteger bi : liUnoTxt) {
       bi = rsa.esponenteE(bi);
-      li2.add(bi);
+      liUnoCripted.add(bi);
     }
+    OptionalInt opt = liUnoCripted.stream().mapToInt(BigInteger::bitLength).max();
+    maxBitsCry = (opt.getAsInt() / shift + 1) * shift;
+    deco.setMaxBits(maxBitsCry);
+    System.out.println("Max bits crypt=" + maxBitsCry);
+
     // 3) list2(BigInt) => deco() => sz2 
-    String sz2 = deco.decodi(li2);
+    String szUnoCrypted = deco.toString(liUnoCripted);
+
     // 4) sz2 => Base64 
-    sz2 = Base64.encodeBase64String(sz2.getBytes());
+    String szUnoCryptedB64 = Base64.encodeBase64String(szUnoCrypted.getBytes());
+
     // 5) chunk di 64 chars
     StringBuilder sb = new StringBuilder();
-    for (int k = 0; k < sz2.length(); k += 64) {
+    for (int k = 0; k < szUnoCryptedB64.length(); k += 64) {
       int fine = k + 64;
-      if (fine > sz2.length())
-        fine = sz2.length();
-      sb.append(sz2.substring(k, fine)).append("\n");
+      if (fine > szUnoCryptedB64.length())
+        fine = szUnoCryptedB64.length();
+      sb.append(szUnoCryptedB64.substring(k, fine)).append("\n");
     }
     txTxtEncoded.setText(sb.toString());
+    Controllore.getInst().setValue(Controllore.FLD_TXT_CODED, sb.toString());
     decodifica(sb.toString());
   }
 
   private void decodifica(String string) {
     RsaObj rsa = MainFrame.getInst().getRsaObj();
     DeCodeString deco = new DeCodeString();
-    deco.setMaxBits(rsa.getNPQmodulus());
+
     // 5) Chunk64 chars == Base64
-    String sz = string.replace("\n", "");
+    String szDueCryptedB64 = string.replace("\n", "");
+
     // 4) Base64 == sz2
-    String sz2 = new String(Base64.decodeBase64(sz));
+    String szDueCrypted = new String(Base64.decodeBase64(szDueCryptedB64));
+
     // 3) sz2 => codi() => list2(BigInt)
-    List<BigInteger> li2 = deco.codifica(sz2);
-    List<BigInteger> li = new ArrayList<>();
-    // 2) list2(BigInt) => RSA.D => list(BigInt)
-    for (BigInteger bi : li2) {
-      bi = rsa.esponenteE(bi);
-      li.add(bi);
+    deco.setMaxBits(maxBitsCry);
+    deco.setShift(8);
+    liDueCrypted = deco.toList(szDueCrypted);
+
+    liDueTxt = new ArrayList<>();
+    for (BigInteger bi : liDueCrypted) {
+      BigInteger bi2 = rsa.esponenteD(bi);
+      liDueTxt.add(bi2);
     }
-    // 1) list(BigInt) => codi() => sz  
-    String szOut = deco.decodi(li);
+
+    // 1) list(BigInt) => codi() => sz
+    deco.setShift(8);
+    String szOut = deco.decodi(liDueTxt);
     System.out.println("Pan6TxtCoded.decodifica():" + szOut);
+    Controllore.getInst().setValue(Controllore.FLD_TXT_DECODED, szOut);
   }
 
 }
