@@ -3,6 +3,8 @@ package sm.clagenna.crypt.view;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +71,13 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
     gbc_btDecode.gridx = 1;
     gbc_btDecode.gridy = 0;
     add(btDecode, gbc_btDecode);
+    btDecode.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String sz = txTxtEncoded.getText();
+        decodifica(sz);
+      }
+    });
 
   }
 
@@ -86,11 +95,11 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
       return;
     RsaObj rsa = MainFrame.getInst().getRsaObj();
     DeCodeString deco = new DeCodeString();
-    deco.setMaxBits(rsa.getNPQmodulus());
     int shift = 8;
     deco.setShift(shift);
+    deco.setMaxBits(rsa.getNPQmodulus());
 
-    liUnoTxt = deco.toList(val);
+    liUnoTxt = deco.toList(val, false);
 
     liUnoCripted = new ArrayList<>();
     for (BigInteger bi : liUnoTxt) {
@@ -103,7 +112,7 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
     System.out.println("Max bits crypt=" + maxBitsCry);
 
     // 3) list2(BigInt) => deco() => sz2 
-    String szUnoCrypted = deco.toString(liUnoCripted);
+    String szUnoCrypted = deco.toString(liUnoCripted, true);
 
     // 4) sz2 => Base64 
     String szUnoCryptedB64 = Base64.encodeBase64String(szUnoCrypted.getBytes());
@@ -132,9 +141,9 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
     String szDueCrypted = new String(Base64.decodeBase64(szDueCryptedB64));
 
     // 3) sz2 => codi() => list2(BigInt)
-    deco.setMaxBits(maxBitsCry);
     deco.setShift(8);
-    liDueCrypted = deco.toList(szDueCrypted);
+    deco.setMaxBits(maxBitsCry);
+    liDueCrypted = deco.toList(szDueCrypted, true);
 
     liDueTxt = new ArrayList<>();
     for (BigInteger bi : liDueCrypted) {
@@ -144,7 +153,7 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
 
     // 1) list(BigInt) => codi() => sz
     deco.setShift(8);
-    String szOut = deco.decodi(liDueTxt);
+    String szOut = deco.toString(liDueTxt, false);
     System.out.println("Pan6TxtCoded.decodifica():" + szOut);
     Controllore.getInst().setValue(Controllore.FLD_TXT_DECODED, szOut);
   }

@@ -70,7 +70,10 @@ public class ProvaEncode4 {
   }
 
   private void uno01Txt2List() {
-    liUnoTxt = deco.toList(CSZ);
+    liUnoTxt = deco.toList(CSZ, false);
+    String sz = deco.toString(liUnoTxt, false);
+    if ( !CSZ.equals(sz))
+      System.out.println("Stringhe differenti !");
   }
 
   private void uno02ListToCrypted() {
@@ -79,14 +82,27 @@ public class ProvaEncode4 {
       bi = rsa.esponenteE(bi);
       liUnoCripted.add(bi);
     }
+    // cerco il valore massimo dopo crypt
     OptionalInt opt = liUnoCripted.stream().mapToInt(BigInteger::bitLength).max();
+    // setto deco su quella qta di bit normalizzata per eccesso
     maxBitsCry = (opt.getAsInt() / deco.getShift() + 1) * deco.getShift();
     deco.setMaxBits(maxBitsCry);
     System.out.println("Max bits crypt=" + maxBitsCry);
+    liDueTxt = new ArrayList<BigInteger>();
+    for (BigInteger bi : liUnoCripted) {
+      bi = rsa.esponenteD(bi);
+      liDueTxt.add(bi);
+    }
+    if ( !deco.confronta(liUnoTxt, liDueTxt))
+      System.out.println("Cry decri diversi !");
   }
 
   private void uno03CryptToString() {
-    szUnoCry = deco.toString(liUnoCripted);
+    // deco.setDebug(true);
+    szUnoCry = deco.toString(liUnoCripted, true);
+    liDueCrypted = deco.toList(szUnoCry, true);
+    if ( !deco.confronta(liUnoCripted, liDueCrypted))
+      System.out.println("String Cry diversi !");
   }
 
   private void uno04CryptStr2B64() {
@@ -101,7 +117,8 @@ public class ProvaEncode4 {
   private void due02CryptStr2List() {
     deco.setMaxBits(maxBitsCry);
     deco.setShift(8);
-    liDueCrypted = deco.toList(szDueCry);
+    liDueCrypted = deco.toList(szDueCry, true);
+    deco.confronta(liUnoCripted, liDueCrypted);
   }
 
   private void due03DecryToList() {
@@ -110,18 +127,17 @@ public class ProvaEncode4 {
       BigInteger bi2 = rsa.esponenteD(bi);
       liDueTxt.add(bi2);
     }
-
+    deco.confronta(liUnoTxt, liDueTxt);
   }
 
   private void due04DecList2Txt() {
-    szDueTxt = deco.toString(liDueTxt);
+    szDueTxt = deco.toString(liDueTxt, false);
   }
 
   private void inizializza() {
     deco = new DeCodeString();
     deco.setShift(s_shift);
     deco.setMaxBits(s_maxBit);
-    uno01Txt2List();
 
     rsa = new RsaObj();
     rsa.setNP(BigInteger.valueOf(897_527L));

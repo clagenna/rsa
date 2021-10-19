@@ -14,9 +14,9 @@ import sm.clagenna.crypt.swing.IRsaListen;
 public class Pan7TxtDecript extends JPanel implements IRsaListen {
 
   /** long serialVersionUID */
-  private static final long serialVersionUID = 593767533148741772L;
-  private IRsa              m_irsa;
-  private JTextArea         txTxtDecripted;
+  private static final long                serialVersionUID = 593767533148741772L;
+  @SuppressWarnings("unused") private IRsa m_irsa;
+  private JTextArea                        txTxtDecripted;
 
   /**
    * Create the panel.

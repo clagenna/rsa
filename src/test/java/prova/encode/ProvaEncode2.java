@@ -18,8 +18,8 @@ public class ProvaEncode2 {
   public void provalo() {
     String sz = "claudio Gennari";
     DeCodeString deco = new DeCodeString();
-    List<BigInteger> li = deco.codifica(sz);
-    String sz2 = deco.decodi(li);
+    List<BigInteger> li = deco.toList(sz, false);
+    String sz2 = deco.toString(li, false);
     System.out.println(" In:" + sz);
     System.out.println("Out:" + sz2);
   }
@@ -38,8 +38,8 @@ public class ProvaEncode2 {
 
   private void doDeco(DeCodeString deco, String sz) {
     System.out.printf("\n InLu: shift=%d, bits=%d\n%s", deco.getShift(), deco.getMaxBits(), sz);
-    List<BigInteger> li = deco.codifica(sz);
-    String sz2 = deco.decodi(li);
+    List<BigInteger> li = deco.toList(sz, false);
+    String sz2 = deco.toString(li, false);
     System.out.printf("\nOutLu:li=%d\n%s\n", li.size(), sz2);
   }
 }

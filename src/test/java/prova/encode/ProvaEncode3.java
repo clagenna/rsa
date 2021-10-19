@@ -3,9 +3,7 @@ package prova.encode;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.OptionalInt;
 
 import org.apache.commons.codec.binary.Base64;
@@ -104,8 +102,8 @@ public class ProvaEncode3 {
     System.out.println();
 
     // 1) base64 => codi() => list(BigInt)
-    List<BigInteger> li = deco.codifica(sz1);
-    szx = deco.decodi(li);
+    List<BigInteger> li = deco.toList(sz1, false);
+    szx = deco.toString(li, false);
     final int q = k;
     li.stream().forEach(s -> System.out.printf(ptf, q, "deco", s_fmt.format(s)));
     System.out.println();
@@ -132,8 +130,8 @@ public class ProvaEncode3 {
     // 3) list2(BigInt) => deco() => sz2
     OptionalInt ii = li2.stream().mapToInt(BigInteger::bitLength).max();
     System.out.println("li2.MaxBitLength=" + ii.getAsInt());
-    String sz2 = deco.decodi(li2);
-    List<BigInteger> li3 = deco.codifica(sz2);
+    String sz2 = deco.toString(li2, true);
+    List<BigInteger> li3 = deco.toList(sz2, true);
     /**
      * dopo la crittazione ho numeri alti in li2, (da 21.042 passo a 813.279 )
      * anche se minori di Fi ( 949.248 ) eppure la decodifica non riporta alla
@@ -171,7 +169,7 @@ public class ProvaEncode3 {
     System.out.printf(ptf, k--, "encoRSA", sz2);
     // 3) creo elenco di BigInt
     final int q = k;
-    List<BigInteger> li = deco.codifica(sz2);
+    List<BigInteger> li = deco.toList(sz2, true);
     li.stream().forEach(s -> System.out.printf(ptf, q, "RsaE", s_fmt.format(s)));
     k--;
     // 2) decodifica dei BigInt tramite RSA
@@ -185,7 +183,7 @@ public class ProvaEncode3 {
     li.stream().forEach(s -> System.out.printf(ptf, p, "decoRSA", s_fmt.format(s)));
     k--;
     // 1) ritorno alla stringa orig
-    String sz3 = deco.decodi(li2);
+    String sz3 = deco.toString(li2, false);
     System.out.printf(ptf, k, " final", sz3);
     return sz3;
   }

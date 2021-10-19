@@ -62,8 +62,8 @@ public class ProvaSeqX {
   private boolean codDeco(List<BigInteger> p_li, int p_maxBit) {
     boolean bRet = false;
     deco.setMaxBits(p_maxBit);
-    String sz2 = deco.decodi(p_li);
-    List<BigInteger> li3 = deco.codifica(sz2);
+    String sz2 = deco.toString(p_li, false);
+    List<BigInteger> li3 = deco.toList(sz2, false);
     bRet = p_li.size() == li3.size();
     if (bRet) {
       for (int k = 0; k < li3.size(); k++) {
