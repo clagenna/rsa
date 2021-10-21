@@ -6,6 +6,7 @@ import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import sm.clagenna.crypt.swing.IRsa;
@@ -43,12 +44,13 @@ public class Pan7TxtDecript extends JPanel implements IRsaListen {
     setLayout(gridBagLayout);
 
     txTxtDecripted = new JTextArea();
+    JScrollPane scrl = new JScrollPane(txTxtDecripted);
     GridBagConstraints gbc_txTxtDecripted = new GridBagConstraints();
     gbc_txTxtDecripted.insets = new Insets(0, 0, 0, 5);
     gbc_txTxtDecripted.fill = GridBagConstraints.BOTH;
     gbc_txTxtDecripted.gridx = 0;
     gbc_txTxtDecripted.gridy = 0;
-    add(txTxtDecripted, gbc_txTxtDecripted);
+    add(scrl, gbc_txTxtDecripted);
 
   }
 

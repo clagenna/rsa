@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import sm.clagenna.crypt.swing.IRsa;
@@ -42,12 +43,13 @@ public class Pan5TxtOrig extends JPanel {
     setLayout(gridBagLayout);
 
     txTxtOrig = new JTextArea();
+    JScrollPane scrl = new JScrollPane(txTxtOrig);
     GridBagConstraints gbc_txTxtOrig = new GridBagConstraints();
     gbc_txTxtOrig.insets = new Insets(0, 0, 0, 5);
     gbc_txTxtOrig.fill = GridBagConstraints.BOTH;
     gbc_txTxtOrig.gridx = 0;
     gbc_txTxtOrig.gridy = 0;
-    add(txTxtOrig, gbc_txTxtOrig);
+    add(scrl, gbc_txTxtOrig);
 
     JButton btEncode = new JButton("Enc");
     GridBagConstraints gbc_btEncode = new GridBagConstraints();

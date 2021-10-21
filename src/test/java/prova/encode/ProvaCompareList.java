@@ -10,11 +10,11 @@ import org.junit.Test;
 
 public class ProvaCompareList {
 
-  List<BigInteger> m_l1;
-  List<BigInteger> m_l2;
-  private int      MIN_A = 141_234;
-  private int      MAX_A = 554_698;
-  NumberFormat     s_fmt = NumberFormat.getIntegerInstance();
+  List<BigInteger>     m_l1;
+  List<BigInteger>     m_l2;
+  private int          MIN_A = 141_234;
+  private int          MAX_A = 554_698;
+  private NumberFormat s_fmt = NumberFormat.getIntegerInstance();
 
   @Test
   public void dothetest() {

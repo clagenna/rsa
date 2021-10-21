@@ -47,7 +47,7 @@ public class AppProperties {
     File fiProp = getFileProps();
     if ( !fiProp.exists())
       return;
-    try (InputStream is = new FileInputStream(CSZ_PROPFILE)) {
+    try (InputStream is = new FileInputStream(fiProp)) {
       m_prop.load(is);
     } catch (Exception l_ex) {
       System.out.println("Errore lettura:" + CSZ_PROPFILE + " " + l_ex.getMessage());
