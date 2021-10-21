@@ -1,0 +1,11 @@
+#RSA  key tipo priv
+#Thu Oct 21 16:47:13 CEST 2021
+KeyName=PrimaKey
+Key.Type=priv
+Carmicael=171204922850
+FiTotient=342409845700
+NumeroD=78468922973
+NumeroE=85602461437
+Modulus=342411181537
+NumeroP=989951
+NumeroQ=345887

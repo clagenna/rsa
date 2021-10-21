@@ -17,11 +17,12 @@ public class RsaObj implements IRsaListen {
   // private static int                 MAX_BIT = 64;
   // private static final BigInteger    DUE = BigInteger.valueOf(2);
 
+  @Getter @Setter private String     keyName;
   @Getter private BigInteger         nP;
   @Getter private BigInteger         nQ;
   @Getter @Setter private BigInteger nPQmodulus;
   @Getter @Setter private BigInteger nPQTotientFi;
-  private BigInteger                 nCarmichael;
+  @Getter @Setter private BigInteger nCarmichael;
   @Getter @Setter private BigInteger nE;
   @Getter @Setter private BigInteger nD;
   private long                       m_nProbes;
@@ -36,11 +37,13 @@ public class RsaObj implements IRsaListen {
   }
 
   public boolean isPresentPQ() {
-    if (nP == null || nP.compareTo(BigInteger.TWO) <= 0)
-      return false;
-    if (nQ == null || nQ.compareTo(BigInteger.TWO) <= 0)
+    if (nP == null || nP.compareTo(BigInteger.TWO) <= 0 || nQ == null || nQ.compareTo(BigInteger.TWO) <= 0)
       return false;
     return true;
+  }
+
+  public boolean isPresentKeyName() {
+    return keyName != null && keyName.length() > 1;
   }
 
   public void calcolaRSAObj() {
@@ -340,13 +343,14 @@ public class RsaObj implements IRsaListen {
   }
 
   public void setNP(BigInteger p_p) {
-    if ( !isPrimo(p_p))
+
+    if (p_p != null && !isPrimo(p_p))
       throw new UnsupportedOperationException("P Non e' primo");
     nP = p_p;
   }
 
   public void setNQ(BigInteger p_q) {
-    if ( !isPrimo(p_q))
+    if (p_q != null && !isPrimo(p_q))
       throw new UnsupportedOperationException("Q Non e' primo");
     nQ = p_q;
   }
@@ -357,6 +361,7 @@ public class RsaObj implements IRsaListen {
 
   public void stampaRis() {
     System.out.println("--------------------");
+    stampaRis("Ky", keyName);
     stampaRis(" P", nP);
     stampaRis(" Q", nQ);
     stampaRis(" N", nPQmodulus);
@@ -372,6 +377,13 @@ public class RsaObj implements IRsaListen {
     String szv = "*NULL*";
     if (p_v != null)
       szv = fmt.format(p_v);
+    stampaRis(p_tit, szv);
+  }
+
+  private void stampaRis(String p_tit, String p_v) {
+    String szv = "*NULL*";
+    if (p_v != null)
+      szv = p_v;
     System.out.printf("%3s=%s\n", p_tit, szv);
   }
 
@@ -388,6 +400,31 @@ public class RsaObj implements IRsaListen {
         stampaRis();
         break;
     }
+
+  }
+
+  public void updateValues() {
+    Controllore cnt = Controllore.getInst();
+    cnt.setValue(Controllore.FLD_KEYNAME, keyName);
+    cnt.setValue(Controllore.FLD_MODULUS, nPQmodulus);
+    cnt.setValue(Controllore.FLD_FITOTIENT, nPQTotientFi);
+    cnt.setValue(Controllore.FLD_CARMICAEL, nCarmichael);
+    cnt.setValue(Controllore.FLD_NP, nP);
+    cnt.setValue(Controllore.FLD_NQ, nQ);
+    cnt.setValue(Controllore.FLD_NE, nE);
+    cnt.setValue(Controllore.FLD_ND, nD);
+  }
+
+  public void cleanKeyValues() {
+    keyName = null;
+    nP = null;
+    nQ = null;
+    nPQmodulus = null;
+    nPQmodulus = null;
+    nPQTotientFi = null;
+    nCarmichael = null;
+    nD = null;
+    nE = null;
 
   }
 

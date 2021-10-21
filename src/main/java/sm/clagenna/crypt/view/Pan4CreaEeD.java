@@ -12,16 +12,23 @@ import java.text.NumberFormat;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import sm.clagenna.crypt.rsa.RsaObj;
 import sm.clagenna.crypt.swing.IRsa;
 import sm.clagenna.crypt.swing.IRsaListen;
 import sm.clagenna.crypt.swing.NumTextField;
+import sm.clagenna.crypt.util.KeyPrivFile;
+import sm.clagenna.crypt.util.KeyPubFile;
 
 public class Pan4CreaEeD extends JPanel implements IRsaListen {
   /** long serialVersionUID */
   private static final long serialVersionUID = 7108091499557509334L;
+  private JTextField        txKeyName;
   private NumTextField      txModulus;
   private NumTextField      txFi;
   private NumTextField      txCarmichael;
@@ -30,6 +37,8 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
   private IRsa              m_irsa;
   private JButton           btEeD;
   private boolean           bSemValueChange;
+  private JButton           btSavePub;
+  private JButton           btSavePriv;
 
   /**
    * Create the panel.
@@ -51,16 +60,49 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
 
     GridBagLayout gridBagLayout = new GridBagLayout();
     gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0 };
-    gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
+    gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
     gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
-    gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+    gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
     setLayout(gridBagLayout);
+
+    JLabel lbKeyName = new JLabel("Nome Key");
+    GridBagConstraints gbc_lbKeyName = new GridBagConstraints();
+    gbc_lbKeyName.anchor = GridBagConstraints.EAST;
+    gbc_lbKeyName.insets = new Insets(0, 0, 5, 5);
+    gbc_lbKeyName.gridx = 1;
+    gbc_lbKeyName.gridy = 0;
+    add(lbKeyName, gbc_lbKeyName);
+
+    txKeyName = new JTextField();
+    txKeyName.getDocument().addDocumentListener(new DocumentListener() {
+      @Override
+      public void insertUpdate(DocumentEvent e) {
+        keyName_upd();
+      }
+
+      @Override
+      public void removeUpdate(DocumentEvent e) {
+        keyName_upd();
+      }
+
+      @Override
+      public void changedUpdate(DocumentEvent e) {
+        keyName_upd();
+      }
+    });
+    GridBagConstraints gbc_txKeyName = new GridBagConstraints();
+    gbc_txKeyName.insets = new Insets(0, 0, 5, 0);
+    gbc_txKeyName.fill = GridBagConstraints.HORIZONTAL;
+    gbc_txKeyName.gridx = 2;
+    gbc_txKeyName.gridy = 0;
+    add(txKeyName, gbc_txKeyName);
+    txKeyName.setColumns(10);
 
     btEeD = new JButton("E e D");
     btEeD.setEnabled(false);
     GridBagConstraints gbc_btEeD = new GridBagConstraints();
-    gbc_btEeD.gridheight = 5;
-    gbc_btEeD.insets = new Insets(0, 0, 0, 5);
+    gbc_btEeD.gridheight = 3;
+    gbc_btEeD.insets = new Insets(0, 0, 5, 5);
     gbc_btEeD.gridx = 0;
     gbc_btEeD.gridy = 0;
     add(btEeD, gbc_btEeD);
@@ -76,7 +118,7 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     gbc_lbModulus.insets = new Insets(0, 0, 5, 5);
     gbc_lbModulus.anchor = GridBagConstraints.EAST;
     gbc_lbModulus.gridx = 1;
-    gbc_lbModulus.gridy = 0;
+    gbc_lbModulus.gridy = 1;
     add(lbModulus, gbc_lbModulus);
 
     txModulus = new NumTextField(Controllore.FLD_MODULUS);
@@ -85,7 +127,7 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     gbc_txModulus.insets = new Insets(0, 0, 5, 0);
     gbc_txModulus.fill = GridBagConstraints.HORIZONTAL;
     gbc_txModulus.gridx = 2;
-    gbc_txModulus.gridy = 0;
+    gbc_txModulus.gridy = 1;
     add(txModulus, gbc_txModulus);
     txModulus.setColumns(10);
 
@@ -94,7 +136,7 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     gbc_lbFi.anchor = GridBagConstraints.EAST;
     gbc_lbFi.insets = new Insets(0, 0, 5, 5);
     gbc_lbFi.gridx = 1;
-    gbc_lbFi.gridy = 1;
+    gbc_lbFi.gridy = 2;
     add(lbFi, gbc_lbFi);
 
     txFi = new NumTextField(Controllore.FLD_FITOTIENT);
@@ -104,7 +146,7 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     gbc_txFi.insets = new Insets(0, 0, 5, 0);
     gbc_txFi.fill = GridBagConstraints.HORIZONTAL;
     gbc_txFi.gridx = 2;
-    gbc_txFi.gridy = 1;
+    gbc_txFi.gridy = 2;
     add(txFi, gbc_txFi);
     txFi.setColumns(10);
 
@@ -113,7 +155,7 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     gbc_lbCarmichael.anchor = GridBagConstraints.EAST;
     gbc_lbCarmichael.insets = new Insets(0, 0, 5, 5);
     gbc_lbCarmichael.gridx = 1;
-    gbc_lbCarmichael.gridy = 2;
+    gbc_lbCarmichael.gridy = 3;
     add(lbCarmichael, gbc_lbCarmichael);
 
     txCarmichael = new NumTextField(Controllore.FLD_CARMICAEL);
@@ -122,16 +164,30 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     gbc_txCarmichael.insets = new Insets(0, 0, 5, 0);
     gbc_txCarmichael.fill = GridBagConstraints.HORIZONTAL;
     gbc_txCarmichael.gridx = 2;
-    gbc_txCarmichael.gridy = 2;
+    gbc_txCarmichael.gridy = 3;
     add(txCarmichael, gbc_txCarmichael);
     txCarmichael.setColumns(10);
+
+    btSavePub = new JButton("Save Pub");
+    btSavePub.setEnabled(false);
+    GridBagConstraints gbc_btSavePub = new GridBagConstraints();
+    gbc_btSavePub.insets = new Insets(0, 0, 5, 5);
+    gbc_btSavePub.gridx = 0;
+    gbc_btSavePub.gridy = 4;
+    add(btSavePub, gbc_btSavePub);
+    btSavePub.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        salvaPubKey();
+      }
+    });
 
     JLabel lbE = new JLabel("E");
     GridBagConstraints gbc_lbE = new GridBagConstraints();
     gbc_lbE.anchor = GridBagConstraints.EAST;
     gbc_lbE.insets = new Insets(0, 0, 5, 5);
     gbc_lbE.gridx = 1;
-    gbc_lbE.gridy = 3;
+    gbc_lbE.gridy = 4;
     add(lbE, gbc_lbE);
 
     txE = new NumTextField(Controllore.FLD_NE);
@@ -140,16 +196,30 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     gbc_txE.insets = new Insets(0, 0, 5, 0);
     gbc_txE.fill = GridBagConstraints.HORIZONTAL;
     gbc_txE.gridx = 2;
-    gbc_txE.gridy = 3;
+    gbc_txE.gridy = 4;
     add(txE, gbc_txE);
     txE.setColumns(10);
+
+    btSavePriv = new JButton("Save Priv");
+    btSavePriv.setEnabled(false);
+    GridBagConstraints gbc_btSavePriv = new GridBagConstraints();
+    gbc_btSavePriv.insets = new Insets(0, 0, 0, 5);
+    gbc_btSavePriv.gridx = 0;
+    gbc_btSavePriv.gridy = 5;
+    add(btSavePriv, gbc_btSavePriv);
+    btSavePriv.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        salvaPrivKey();
+      }
+    });
 
     JLabel lbD = new JLabel("D");
     GridBagConstraints gbc_lbD = new GridBagConstraints();
     gbc_lbD.anchor = GridBagConstraints.EAST;
     gbc_lbD.insets = new Insets(0, 0, 0, 5);
     gbc_lbD.gridx = 1;
-    gbc_lbD.gridy = 4;
+    gbc_lbD.gridy = 5;
     add(lbD, gbc_lbD);
 
     txD = new NumTextField(Controllore.FLD_ND);
@@ -157,39 +227,9 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     GridBagConstraints gbc_txD = new GridBagConstraints();
     gbc_txD.fill = GridBagConstraints.HORIZONTAL;
     gbc_txD.gridx = 2;
-    gbc_txD.gridy = 4;
+    gbc_txD.gridy = 5;
     add(txD, gbc_txD);
     txD.setColumns(10);
-    //    GridBagLayout gridBagLayout = new GridBagLayout();
-    //    gridBagLayout.columnWidths = new int[] { 0, 2, 40, 0 };
-    //    gridBagLayout.rowHeights = new int[] { 0, 0 };
-    //    gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
-    //    gridBagLayout.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
-    //    setLayout(gridBagLayout);
-    //
-    //    JButton btGeneraED = new JButton("E e D");
-    //    GridBagConstraints gbc_btGeneraED = new GridBagConstraints();
-    //    gbc_btGeneraED.insets = new Insets(0, 0, 0, 5);
-    //    gbc_btGeneraED.gridx = 0;
-    //    gbc_btGeneraED.gridy = 0;
-    //    add(btGeneraED, gbc_btGeneraED);
-    //
-    //    JLabel lbModulus = new JLabel("New label");
-    //    GridBagConstraints gbc_lbModulus = new GridBagConstraints();
-    //    gbc_lbModulus.insets = new Insets(0, 0, 0, 5);
-    //    gbc_lbModulus.anchor = GridBagConstraints.EAST;
-    //    gbc_lbModulus.gridx = 1;
-    //    gbc_lbModulus.gridy = 0;
-    //    add(lbModulus, gbc_lbModulus);
-    //
-    //    textField = new JTextField();
-    //    GridBagConstraints gbc_textField = new GridBagConstraints();
-    //    gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-    //    gbc_textField.gridx = 2;
-    //    gbc_textField.gridy = 0;
-    //    add(textField, gbc_textField);
-    //    textField.setColumns(10);
-
   }
 
   @Override
@@ -220,15 +260,31 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
         case Controllore.FLD_NE:
           bi = (BigInteger) val;
           txE.setValue(bi);
+          btSavePub.setEnabled(rsa.isPresentKeyName() && bi != null && bi.signum() != 0);
           break;
         case Controllore.FLD_ND:
           bi = (BigInteger) val;
           txD.setValue(bi);
+          btSavePriv.setEnabled(rsa.isPresentKeyName() && bi != null && bi.signum() != 0);
+          break;
+        case Controllore.FLD_KEYNAME:
+          txKeyName.setText((String) val);
+          btSavePub.setEnabled(rsa.isPresentKeyName() && rsa.isPresentPQ());
+          btSavePriv.setEnabled(rsa.isPresentKeyName() && rsa.isPresentPQ());
           break;
       }
     } finally {
       bSemValueChange = false;
     }
+  }
+
+  protected void keyName_upd() {
+    Controllore cnt = Controllore.getInst();
+    String szK = txKeyName.getText();
+    RsaObj rsa = MainFrame.getInst().getRsaObj();
+    rsa.setKeyName(szK);
+    if (szK != null)
+      cnt.setValue(Controllore.FLD_KEYNAME, szK);
   }
 
   protected void calcolaEeD() {
@@ -248,5 +304,29 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     } finally {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
+  }
+
+  protected void salvaPubKey() {
+    RsaObj rsa = MainFrame.getInst().getRsaObj();
+    KeyPubFile kPub = new KeyPubFile();
+    String szFiOut = kPub.getFileKey().getAbsolutePath();
+    int dialogButton = JOptionPane.YES_NO_OPTION;
+    String szMsg = String.format("Sei sicuro di voler salvare la PUB Key %s\nsul file\n%s", rsa.getKeyName(), szFiOut);
+    int ret = JOptionPane.showConfirmDialog(this, szMsg, "Attenzione", dialogButton);
+    if (ret != JOptionPane.YES_OPTION)
+      return;
+    kPub.saveFile();
+  }
+
+  protected void salvaPrivKey() {
+    RsaObj rsa = MainFrame.getInst().getRsaObj();
+    KeyPrivFile kPub = new KeyPrivFile();
+    String szFiOut = kPub.getFileKey().getAbsolutePath();
+    int dialogButton = JOptionPane.YES_NO_OPTION;
+    String szMsg = String.format("Sei sicuro di voler salvare la PRIV Key %s\nsul file\n%s", rsa.getKeyName(), szFiOut);
+    int ret = JOptionPane.showConfirmDialog(this, szMsg, "Attenzione", dialogButton);
+    if (ret != JOptionPane.YES_OPTION)
+      return;
+    kPub.saveFile();
   }
 }

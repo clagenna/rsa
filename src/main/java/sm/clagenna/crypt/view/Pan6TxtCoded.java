@@ -142,6 +142,7 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
 
     // 3) sz2 => codi() => list2(BigInt)
     deco.setShift(8);
+    // ??????? solo decode non va !!!!
     deco.setMaxBits(maxBitsCry);
     liDueCrypted = deco.toList(szDueCrypted, true);
 

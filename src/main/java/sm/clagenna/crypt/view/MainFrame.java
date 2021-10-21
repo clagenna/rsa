@@ -5,11 +5,18 @@ import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -20,8 +27,11 @@ import lombok.Getter;
 import sm.clagenna.crypt.primi.PrimiFactory;
 import sm.clagenna.crypt.rsa.RsaObj;
 import sm.clagenna.crypt.swing.IRsa;
+import sm.clagenna.crypt.util.AppProperties;
+import sm.clagenna.crypt.util.KeyPrivFile;
+import sm.clagenna.crypt.util.KeyPubFile;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements WindowListener {
 
   /** long serialVersionUID */
   private static final long        serialVersionUID = 333609615894254079L;
@@ -30,6 +40,7 @@ public class MainFrame extends JFrame {
   @Getter private IRsa             irsa;
   @Getter private RsaObj           rsaObj;
   @Getter private PrimiFactory     primi;
+  private AppProperties            m_appProps;
 
   /**
    * Launch the application.
@@ -61,13 +72,13 @@ public class MainFrame extends JFrame {
     irsa = new Controllore();
     rsaObj = new RsaObj();
     primi = new PrimiFactory();
+    addWindowListener(this);
     initComponents();
   }
 
   private void initComponents() {
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     setBounds(100, 100, 666, 602);
-
     JMenuBar menuBar = new JMenuBar();
     setJMenuBar(menuBar);
 
@@ -76,12 +87,31 @@ public class MainFrame extends JFrame {
 
     JMenuItem mnLeggi = new JMenuItem("Leggi");
     mnFile.add(mnLeggi);
+    mnLeggi.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        mnuLeggi_Click();
+      }
+    });
 
-    JMenuItem mnSalva = new JMenuItem("Salva");
-    mnFile.add(mnSalva);
+    //    JMenuItem mnSalva = new JMenuItem("Salva");
+    //    mnFile.add(mnSalva);
+    //    mnSalva.addActionListener(new ActionListener() {
+    //      @Override
+    //      public void actionPerformed(ActionEvent e) {
+    //        mnuSalva_Click();
+    //      }
+    //    });
+    mnFile.addSeparator();
 
     JMenuItem mnExit = new JMenuItem("Esci");
     mnFile.add(mnExit);
+    mnExit.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        mnuExit_Click();
+      }
+    });
     contentPane = new JPanel();
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     setContentPane(contentPane);
@@ -183,6 +213,106 @@ public class MainFrame extends JFrame {
     panDatiTesto.add(panTxtDecript, gbc_panTxtDecript);
 
     contentPane.add(tabPane, BorderLayout.CENTER);
+
+  }
+
+  private void mnuLeggi_Click() {
+    JFileChooser fch = new JFileChooser();
+    AppProperties props = AppProperties.getInst();
+    String lastDir = System.getProperty("user.dir");
+
+    String szd = props.getLastDir();
+    if (szd != null)
+      lastDir = szd;
+    fch.setCurrentDirectory(new File(lastDir));
+    fch.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    int nRes = fch.showOpenDialog(this);
+    if (nRes != JFileChooser.APPROVE_OPTION) {
+      System.out.println("Nessun file scelto !");
+      return;
+    }
+    File selFi = fch.getSelectedFile();
+    props.setLastFile(selFi.getAbsolutePath());
+    props.setLastDir(selFi.getParent());
+    KeyPubFile kfi = new KeyPubFile();
+    if (selFi.getName().toLowerCase().endsWith("priv.txt"))
+      kfi = new KeyPrivFile();
+    kfi.setFileKey(selFi);
+    kfi.leggiFile();
+  }
+
+  //  protected void mnuSalva_Click() {
+  //    RsaObj rsa = MainFrame.getInst().getRsaObj();
+  //    String keyNam = rsa.getKeyName();
+  //    if (keyNam == null) {
+  //      JOptionPane.showConfirmDialog(this, "Manca il nome del Key file", "Fornire il nome", JOptionPane.OK_OPTION);
+  //      return;
+  //    }
+  //
+  //    JFileChooser fch = new JFileChooser();
+  //    AppProperties props = AppProperties.getInst();
+  //    String lastDir = System.getProperty("user.dir");
+  //
+  //    String szd = props.getLastDir();
+  //    if (szd != null)
+  //      lastDir = szd;
+  //    fch.setCurrentDirectory(new File(lastDir));
+  //    fch.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+  //
+  //    int nRes = fch.showOpenDialog(this);
+  //    if (nRes != JFileChooser.APPROVE_OPTION) {
+  //      System.out.println("Nessun direttorio scelto !");
+  //      return;
+  //    }
+  //    File selFi = fch.getSelectedFile();
+  //    props.setLastDir(selFi.getAbsolutePath());
+  //  }
+
+  protected void mnuExit_Click() {
+    if (m_appProps == null)
+      m_appProps = new AppProperties(this);
+    m_appProps.salvaProperties();
+    this.dispose();
+  }
+
+  @Override
+  public void windowOpened(WindowEvent e) {
+    //    System.out.println("MainFrame.windowOpened() : user.home=" + System.getProperty("user.home"));
+    if (m_appProps == null)
+      m_appProps = new AppProperties(this);
+    m_appProps.leggiProperties();
+  }
+
+  @Override
+  public void windowClosing(WindowEvent e) {
+    System.out.println("MainFrame.windowClosing()");
+    if (m_appProps == null)
+      m_appProps = new AppProperties(this);
+    m_appProps.salvaProperties();
+  }
+
+  @Override
+  public void windowClosed(WindowEvent e) {
+    System.out.println("MainFrame.windowClosed()");
+  }
+
+  @Override
+  public void windowIconified(WindowEvent e) {
+
+  }
+
+  @Override
+  public void windowDeiconified(WindowEvent e) {
+
+  }
+
+  @Override
+  public void windowActivated(WindowEvent e) {
+
+  }
+
+  @Override
+  public void windowDeactivated(WindowEvent e) {
 
   }
 

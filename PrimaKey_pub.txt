@@ -1,0 +1,7 @@
+#RSA  key tipo pub
+#Thu Oct 21 16:44:48 CEST 2021
+KeyName=PrimaKey
+Key.Type=pub
+FiTotient=342409845700
+NumeroE=85602461437
+Modulus=342411181537
