@@ -6,11 +6,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -22,6 +24,7 @@ import sm.clagenna.crypt.rsa.RsaObj;
 import sm.clagenna.crypt.swing.IRsa;
 import sm.clagenna.crypt.swing.IRsaListen;
 import sm.clagenna.crypt.swing.NumTextField;
+import sm.clagenna.crypt.util.AppProperties;
 import sm.clagenna.crypt.util.KeyPrivFile;
 import sm.clagenna.crypt.util.KeyPubFile;
 
@@ -279,12 +282,20 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
   }
 
   protected void keyName_upd() {
-    Controllore cnt = Controllore.getInst();
-    String szK = txKeyName.getText();
-    RsaObj rsa = MainFrame.getInst().getRsaObj();
-    rsa.setKeyName(szK);
-    if (szK != null)
-      cnt.setValue(Controllore.FLD_KEYNAME, szK);
+    if (bSemValueChange)
+      return;
+    try {
+
+      bSemValueChange = true;
+      Controllore cnt = Controllore.getInst();
+      String szK = txKeyName.getText();
+      RsaObj rsa = MainFrame.getInst().getRsaObj();
+      rsa.setKeyName(szK);
+      if (szK != null)
+        cnt.setValue(Controllore.FLD_KEYNAME, szK);
+    } finally {
+      bSemValueChange = false;
+    }
   }
 
   protected void calcolaEeD() {
@@ -307,6 +318,12 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
   }
 
   protected void salvaPubKey() {
+    File selDir = apriSaveDialog();
+    if (selDir == null)
+      return;
+    AppProperties props = AppProperties.getInst();
+    props.setLastDir(selDir.getAbsolutePath());
+
     RsaObj rsa = MainFrame.getInst().getRsaObj();
     KeyPubFile kPub = new KeyPubFile();
     String szFiOut = kPub.getFileKey().getAbsolutePath();
@@ -319,6 +336,11 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
   }
 
   protected void salvaPrivKey() {
+    File selDir = apriSaveDialog();
+    if (selDir == null)
+      return;
+    AppProperties props = AppProperties.getInst();
+    props.setLastDir(selDir.getAbsolutePath());
     RsaObj rsa = MainFrame.getInst().getRsaObj();
     KeyPrivFile kPub = new KeyPrivFile();
     String szFiOut = kPub.getFileKey().getAbsolutePath();
@@ -328,5 +350,17 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     if (ret != JOptionPane.YES_OPTION)
       return;
     kPub.saveFile();
+  }
+
+  private File apriSaveDialog() {
+    JFileChooser fch = MainFrame.getInst().creaFileChooser();
+    fch.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    int nRes = fch.showSaveDialog(this);
+    if (nRes != JFileChooser.APPROVE_OPTION) {
+      System.out.println("Nessun file scelto !");
+      return null;
+    }
+    File selDir = fch.getSelectedFile();
+    return selDir;
   }
 }

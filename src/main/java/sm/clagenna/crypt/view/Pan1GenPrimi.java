@@ -7,20 +7,23 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
-import sm.clagenna.crypt.primi.PrimiFactory;
 import sm.clagenna.crypt.swing.IRsa;
 import sm.clagenna.crypt.swing.IRsaListen;
 import sm.clagenna.crypt.swing.NumTextField;
+import sm.clagenna.crypt.util.PrimiWorker;
 
-public class Pan1GenPrimi extends JPanel implements IRsaListen {
+public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeListener {
 
   /** long serialVersionUID */
   private static final long serialVersionUID = -4193143331761193489L;
@@ -28,6 +31,8 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen {
   private NumTextField      txPrimiGenerati;
   private IRsa              m_irsa;
   private JButton           btGeneraPrimi;
+  private PrimiWorker       primiGen;
+  private JProgressBar      progressBar;
 
   public Pan1GenPrimi() {
     initComponents();
@@ -48,14 +53,14 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen {
     fldSet.setBorder(BorderFactory.createTitledBorder("Generazione Primi"));
     GridBagLayout gbl_fldSet = new GridBagLayout();
     gbl_fldSet.columnWidths = new int[] { 0, 0, 0, 0, 0, 0 };
-    gbl_fldSet.rowHeights = new int[] { 0, 0 };
-    gbl_fldSet.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-    gbl_fldSet.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+    gbl_fldSet.rowHeights = new int[] { 0, 0, 0 };
+    gbl_fldSet.columnWeights = new double[] { 1.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+    gbl_fldSet.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
     fldSet.setLayout(gbl_fldSet);
 
     JLabel lblQtaPrimi = new JLabel("Quantita");
     GridBagConstraints gbc_lblQtaPrimi = new GridBagConstraints();
-    gbc_lblQtaPrimi.insets = new Insets(0, 0, 0, 5);
+    gbc_lblQtaPrimi.insets = new Insets(0, 0, 5, 5);
     gbc_lblQtaPrimi.anchor = GridBagConstraints.EAST;
     gbc_lblQtaPrimi.gridx = 0;
     gbc_lblQtaPrimi.gridy = 0;
@@ -67,7 +72,7 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen {
 
     GridBagConstraints gbc_txQtaPrimi = new GridBagConstraints();
     gbc_txQtaPrimi.anchor = GridBagConstraints.NORTH;
-    gbc_txQtaPrimi.insets = new Insets(0, 0, 0, 5);
+    gbc_txQtaPrimi.insets = new Insets(0, 0, 5, 5);
     gbc_txQtaPrimi.fill = GridBagConstraints.HORIZONTAL;
     gbc_txQtaPrimi.gridx = 1;
     gbc_txQtaPrimi.gridy = 0;
@@ -83,14 +88,14 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen {
       }
     });
     GridBagConstraints gbc_btGeneraPrimi = new GridBagConstraints();
-    gbc_btGeneraPrimi.insets = new Insets(0, 0, 0, 5);
+    gbc_btGeneraPrimi.insets = new Insets(0, 0, 5, 5);
     gbc_btGeneraPrimi.gridx = 2;
     gbc_btGeneraPrimi.gridy = 0;
     fldSet.add(btGeneraPrimi, gbc_btGeneraPrimi);
 
     JLabel lblNewLabel_1 = new JLabel("Generati");
     GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-    gbc_lblNewLabel_1.insets = new Insets(0, 0, 0, 5);
+    gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
     gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
     gbc_lblNewLabel_1.gridx = 3;
     gbc_lblNewLabel_1.gridy = 0;
@@ -102,20 +107,36 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen {
 
     txPrimiGenerati.setEditable(false);
     GridBagConstraints gbc_txPrimiGenerati = new GridBagConstraints();
+    gbc_txPrimiGenerati.insets = new Insets(0, 0, 5, 0);
     gbc_txPrimiGenerati.fill = GridBagConstraints.HORIZONTAL;
     gbc_txPrimiGenerati.gridx = 4;
     gbc_txPrimiGenerati.gridy = 0;
     fldSet.add(txPrimiGenerati, gbc_txPrimiGenerati);
     txPrimiGenerati.setColumns(5);
 
+    progressBar = new JProgressBar();
+    GridBagConstraints gbc_textField = new GridBagConstraints();
+    gbc_textField.insets = new Insets(0, 0, 0, 5);
+    gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+    gbc_textField.gridx = 0;
+    gbc_textField.gridy = 1;
+    gbc_textField.gridwidth = 5;
+    fldSet.add(progressBar, gbc_textField);
+    progressBar.setValue(0);
+    progressBar.setStringPainted(true);
   }
 
   protected void btGenera_Click() {
     try {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      PrimiFactory primFact = PrimiFactory.getInst();
+      // PrimiFactory primFact = PrimiFactory.getInst();
+      //      primFact.creaPrimi(qtaP);
+      btGeneraPrimi.setEnabled(false);
+      primiGen = new PrimiWorker();
+      primiGen.addPropertyChangeListener(this);
       int qtaP = ((BigInteger) txQtaPrimi.getValue()).intValue();
-      primFact.creaPrimi(qtaP);
+      primiGen.setQtaPrimi(qtaP);
+      primiGen.execute();
     } finally {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
@@ -136,6 +157,19 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen {
         break;
     }
 
+  }
+
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    System.out.printf("propertyChange(%s)\n", evt.getPropertyName());
+    if ( !"progress".equals(evt.getPropertyName()))
+      return;
+    int prg = (Integer) evt.getNewValue();
+    if (prg >= 99) {
+      btGeneraPrimi.setEnabled(true);
+      prg = 100;
+    }
+    progressBar.setValue(prg);
   }
 
 }

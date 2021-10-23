@@ -4,7 +4,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.SwingWorker;
+
 import lombok.Getter;
+import sm.clagenna.crypt.util.PrimiWorker;
 import sm.clagenna.crypt.view.Controllore;
 
 @SuppressWarnings("unused")
@@ -14,6 +17,9 @@ public class PrimiFactory {
   private static final DecimalFormat fmt  = new DecimalFormat("#,###,###,###,###");
 
   @Getter private List<Long>         liPrimi;
+  PrimiWorker                        swingW;
+  private int                        progrSteps;
+  private long                       kProgr;
 
   public PrimiFactory() {
     if (s_inst != null)
@@ -38,18 +44,35 @@ public class PrimiFactory {
     // primi sono distribuiti *SOLO* su (6n-1,6n+1)
     long ll = 2;
     long lx = 0;
+    kProgr = 0;
     do {
       lx = ll++ * 6 - 1;
-      if (isPrimo(lx))
+      if (isPrimo(lx)) {
         liPrimi.add(lx);
+        if (swingW != null)
+          progressBar(p_QtaMax);
+      }
       lx += 2;
-      if (isPrimo(lx))
+      if (isPrimo(lx)) {
         liPrimi.add(lx);
+        if (swingW != null)
+          progressBar(p_QtaMax);
+      }
     } while (liPrimi.size() < p_QtaMax);
     Controllore cnt = Controllore.getInst();
     if (cnt != null)
       cnt.setValue(Controllore.FLD_QTAPRIMIGEN, liPrimi.size());
     return liPrimi;
+  }
+
+  private void progressBar(long p_QtaMax) {
+    if (swingW == null)
+      return;
+    if (++kProgr >= progrSteps) {
+      int p = (int) ((double) liPrimi.size() / (double) p_QtaMax * 100F);
+      swingW.pubblica(p);
+      kProgr = 0;
+    }
   }
 
   public boolean isPrimo(long vv) {
@@ -85,6 +108,12 @@ public class PrimiFactory {
         return false;
     }
     return bRet;
+  }
+
+  public void creaPrimi(PrimiWorker primiWorker, int qtaP) {
+    swingW = primiWorker;
+    progrSteps = (int) (qtaP / 100F);
+    creaPrimi(qtaP);
   }
 
 }

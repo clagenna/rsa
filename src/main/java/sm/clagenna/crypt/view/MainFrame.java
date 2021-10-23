@@ -217,14 +217,8 @@ public class MainFrame extends JFrame implements WindowListener {
   }
 
   private void mnuLeggi_Click() {
-    JFileChooser fch = new JFileChooser();
     AppProperties props = AppProperties.getInst();
-    String lastDir = System.getProperty("user.dir");
-
-    String szd = props.getLastDir();
-    if (szd != null)
-      lastDir = szd;
-    fch.setCurrentDirectory(new File(lastDir));
+    JFileChooser fch = creaFileChooser();
     fch.setFileSelectionMode(JFileChooser.FILES_ONLY);
     int nRes = fch.showOpenDialog(this);
     if (nRes != JFileChooser.APPROVE_OPTION) {
@@ -239,6 +233,18 @@ public class MainFrame extends JFrame implements WindowListener {
       kfi = new KeyPrivFile();
     kfi.setFileKey(selFi);
     kfi.leggiFile();
+  }
+
+  public JFileChooser creaFileChooser() {
+    JFileChooser fch = new JFileChooser();
+    AppProperties props = AppProperties.getInst();
+    String lastDir = System.getProperty("user.dir");
+
+    String szd = props.getLastDir();
+    if (szd != null)
+      lastDir = szd;
+    fch.setCurrentDirectory(new File(lastDir));
+    return fch;
   }
 
   //  protected void mnuSalva_Click() {
