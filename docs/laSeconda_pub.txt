@@ -1,0 +1,7 @@
+#RSA  key tipo pub
+#Sat Oct 23 12:12:19 CEST 2021
+KeyName=laSeconda
+Key.Type=pub
+FiTotient=21472145223360
+NumeroE=5368036305847
+Modulus=21472154609999

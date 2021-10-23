@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -27,11 +26,12 @@ import lombok.Getter;
 import sm.clagenna.crypt.primi.PrimiFactory;
 import sm.clagenna.crypt.rsa.RsaObj;
 import sm.clagenna.crypt.swing.IRsa;
+import sm.clagenna.crypt.swing.IRsaListen;
 import sm.clagenna.crypt.util.AppProperties;
 import sm.clagenna.crypt.util.KeyPrivFile;
 import sm.clagenna.crypt.util.KeyPubFile;
 
-public class MainFrame extends JFrame implements WindowListener {
+public class MainFrame extends JFrame implements WindowListener, IRsaListen {
 
   /** long serialVersionUID */
   private static final long        serialVersionUID = 333609615894254079L;
@@ -70,6 +70,7 @@ public class MainFrame extends JFrame implements WindowListener {
       throw new UnsupportedOperationException("MainFrame gia istanziata");
     inst = this;
     irsa = new Controllore();
+    irsa.addListener(this);
     rsaObj = new RsaObj();
     primi = new PrimiFactory();
     addWindowListener(this);
@@ -319,6 +320,22 @@ public class MainFrame extends JFrame implements WindowListener {
 
   @Override
   public void windowDeactivated(WindowEvent e) {
+
+  }
+
+  @Override
+  public void valueChanged(String id, Object val) {
+    switch (id) {
+      case Controllore.FLD_KEYNAME:
+        String pup = "*no key*";
+        if (rsaObj.isPrivKeyPresent())
+          pup = "Pub/Priv";
+        else if (rsaObj.isPubKeyPresent())
+          pup = "Pub";
+        String tit = String.format("Key %s (%s)", val, pup);
+        this.setTitle(tit);
+        break;
+    }
 
   }
 

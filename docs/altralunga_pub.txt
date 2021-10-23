@@ -1,0 +1,7 @@
+#RSA  key tipo pub
+#Sat Oct 23 09:21:16 CEST 2021
+KeyName=altralunga
+Key.Type=pub
+FiTotient=434718187816500
+NumeroE=36226515651413
+Modulus=434718252260689

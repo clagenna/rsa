@@ -46,6 +46,20 @@ public class RsaObj implements IRsaListen {
     return keyName != null && keyName.length() > 1;
   }
 
+  public boolean isPubKeyPresent() {
+    boolean bRet = nPQmodulus != null && nPQmodulus.signum() > 0;
+    if (bRet)
+      bRet = nE != null && nE.signum() > 0;
+    return bRet;
+  }
+
+  public boolean isPrivKeyPresent() {
+    boolean bRet = nPQmodulus != null && nPQmodulus.signum() > 0;
+    if (bRet)
+      bRet = nD != null && nD.signum() > 0;
+    return bRet;
+  }
+
   public void calcolaRSAObj() {
     nPQmodulus = null;
     nPQTotientFi = null;
