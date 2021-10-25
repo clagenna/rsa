@@ -26,14 +26,15 @@ public class RsaObj implements IRsaListen {
   @Getter @Setter private BigInteger nE;
   @Getter @Setter private BigInteger nD;
   private long                       m_nProbes;
+  private NumberFormat fmt;
   // private BigInteger              m_GuessKprev;
-
   // private BigInteger[]               arrExp;
 
   public RsaObj() {
     Controllore cnt = Controllore.getInst();
     if (cnt != null)
       cnt.addListener(this);
+    fmt = NumberFormat.getIntegerInstance();
   }
 
   public boolean isPresentPQ() {
@@ -127,8 +128,8 @@ public class RsaObj implements IRsaListen {
       // }
       nE = nE.add(BigInteger.TWO);
     }
-    if (nE.signum() <= 0)
-      System.out.println("RsaObj.calcolaE2()");
+    //    if (nE.signum() <= 0)
+    //      System.out.println("RsaObj.calcolaE2()");
     if (cnt != null) {
       cnt.setValue(Controllore.FLD_MODULUS, nPQmodulus);
       cnt.setValue(Controllore.FLD_FITOTIENT, nPQTotientFi);
@@ -175,6 +176,7 @@ public class RsaObj implements IRsaListen {
    *
    * @return
    */
+  @SuppressWarnings("unused")
   private BigInteger calcolaD2() {
     Controllore cnt = Controllore.getInst();
     boolean bTest = false;
@@ -184,12 +186,13 @@ public class RsaObj implements IRsaListen {
         cnt.setValue(Controllore.FLD_ND, nD);
       return nD;
     }
-    NumberFormat fmt = NumberFormat.getIntegerInstance();
+
     BigInteger biRet = null;
     BigInteger[] biResto = { BigInteger.ZERO, UNO };
 
     // 1) verifico che x * e mod fi == 1 iterando x
     BigInteger d_naif = Gcd.multModInvNaif(nE, nPQTotientFi);
+    
     // 2) recupero il valore di d=x da euclide
     // se x<0 allora d=x mod fi
     GcdRec rec = Gcd.gcd(nE, nPQTotientFi);
@@ -199,10 +202,10 @@ public class RsaObj implements IRsaListen {
     // 3) chiedo a Java il inverse moltiplicativo di e modulo fi
     BigInteger d_jmoinv = nE.modInverse(nPQTotientFi);
 
-    System.out.printf("naif d=%s\tEuclide d=%s\tmod.inv=%s\n", //
-        fmt.format(d_naif), //
-        fmt.format(d_eucl), //
-        fmt.format(d_jmoinv));
+    // System.out.printf("naif d=%s\tEuclide d=%s\tmod.inv=%s\n", //
+    //        fmt.format(d_naif), //
+    //        fmt.format(d_eucl), //
+    //        fmt.format(d_jmoinv));
     // 4) trovare un intero X che causa D = (X*(P-1)(Q-1) + 1) / E per essere un numero intero
     m_nProbes = 1;
     while ( !biResto[1].equals(BigInteger.ZERO) || biResto[0].equals(nE)) {
@@ -244,7 +247,7 @@ public class RsaObj implements IRsaListen {
         .subtract( //
             p.divide(q) //
                 .multiply(a));
-    System.out.printf("p=%d, q=%d, d=%d, a=%d, b=%d\n", p, q, d, a, b);
+    // System.out.printf("p=%d, q=%d, d=%d, a=%d, b=%d\n", p, q, d, a, b);
     return new BigInteger[] { d, a, b };
   }
 
@@ -387,7 +390,6 @@ public class RsaObj implements IRsaListen {
   }
 
   private void stampaRis(String p_tit, BigInteger p_v) {
-    NumberFormat fmt = NumberFormat.getIntegerInstance();
     String szv = "*NULL*";
     if (p_v != null)
       szv = fmt.format(p_v);
@@ -403,7 +405,6 @@ public class RsaObj implements IRsaListen {
 
   @Override
   public void valueChanged(String id, Object val) {
-
     switch (id) {
       case Controllore.FLD_NP:
         setNP((BigInteger) val);
@@ -414,7 +415,6 @@ public class RsaObj implements IRsaListen {
         stampaRis();
         break;
     }
-
   }
 
   public void updateValues() {

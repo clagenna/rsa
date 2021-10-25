@@ -16,7 +16,7 @@ public class PrimiWorker extends SwingWorker<Void, Void> {
 
   @Override
   protected void done() {
-    System.out.println("PrimiWorker.done()");
+    // System.out.println("PrimiWorker.done()");
   }
 
   public void pubblica(int p) {

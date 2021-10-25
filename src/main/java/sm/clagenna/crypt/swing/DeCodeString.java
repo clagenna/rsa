@@ -1,6 +1,7 @@
 package sm.clagenna.crypt.swing;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class DeCodeString {
         case ccData:
           char canded = (char) (cc & maskBit.intValue());
           if (cc > maskBit.intValue()) {
-            System.out.printf("codifica(%d)=%c\n", (int) cc, cc);
+            // System.out.printf("codifica(%d)=%c\n", (int) cc, cc);
             canded = changeChar(cc);
           }
           bi = bi.shiftLeft(shift).add(BigInteger.valueOf(canded));
@@ -167,13 +168,13 @@ public class DeCodeString {
   public String toBase64(String p_sz) {
     if (p_sz == null || p_sz.length() == 0)
       return null;
-    return Base64.encodeBase64String(p_sz.getBytes());
+    return Base64.encodeBase64String(p_sz.getBytes(StandardCharsets.UTF_8));
   }
 
   public String fromBase64(String p_b64) {
     if (p_b64 == null || p_b64.length() == 0)
       return null;
-    return new String(Base64.decodeBase64(p_b64.getBytes()));
+    return new String(Base64.decodeBase64(p_b64.getBytes(StandardCharsets.UTF_8)));
   }
 
   public void setMaxVal(BigInteger p_v) {

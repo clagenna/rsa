@@ -161,7 +161,7 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeLi
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    System.out.printf("propertyChange(%s)\n", evt.getPropertyName());
+    // System.out.printf("propertyChange(%s)\n", evt.getPropertyName());
     if ( !"progress".equals(evt.getPropertyName()))
       return;
     int prg = (Integer) evt.getNewValue();

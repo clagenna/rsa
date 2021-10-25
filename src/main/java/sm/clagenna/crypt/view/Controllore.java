@@ -18,6 +18,7 @@ public class Controllore implements IRsa {
   public static final String FLD_QTA_PRIMIP      = "QtaPrimiP";
   public static final String FLD_PRIMO_INIZIALEQ = "PrimoInizialeQ";
   public static final String FLD_QTA_PRIMIQ      = "QtaPrimiQ";
+  public static final String FLD_DEBUG           = "debug";
 
   public static final String FLD_KEYNAME         = "KeyName";
   public static final String FLD_NP              = "NumeroP";

@@ -1,0 +1,52 @@
+--------------------
+ Ky=qwerty
+  P=45.554.473
+  Q=56.745.713
+  N=2.585.021.050.724.249
+ Fi=2.585.020.948.424.064
+ Cr=323.127.618.553.008
+  E=161.563.809.276.511
+  D=1.869.524.078.770.975
+-----------------------------------------------------------
+This example would result in the assembly id being appended to the finalName, 
+so if you need to have a name of region-full.jar, you can specify the finalName 
+as region and the assembly id as full. This will result in a file in target 
+called region-full.jar, but note it will still be installed to the Maven repository 
+as an attached artifact with full used as the classifier. As long as this id is 
+different to that for your other assembly there should be no collision though.
+-----------------------------------------------------------
+BsKXSXcWwpbDtAcCwoNDw74SW0UHBijDuBZ6wopeBwLCgcOJaVVmw7QHCMKtw7TD
+gcKzw7RGBwPCmSszTmQ0BwPDjgUPw7HCojEHBV9AwpRhw5zDtgcCwrbDlsOcwpTC
+gB0HBMKXa0rDmsOyw6UHCMOmbW03UhMHAg3CiMOTVsKkfgcFwqVoLnPCgRQHCMKg
+w4cow704wp4HAVsrw4HCnmnDgQcDwqbCnzXCnsOLwqUHAwEye05/QwcDVsKpEMOI
+d8OiBwU1F3rCssKPw4sGaCPChUfCsjcHB2LDvBU2w4/DsgY6wrHCu8KWcMKWBwHC
+qWzDrWpIawcEw4YiZsOIeRgGw4bDu3pRwpbDhQcIw6d+wrg4w5hRBwkXG3k4w5TD
+sQcEw6giw67ChcKBNQcGw7p6FnRRw6oHB8K4XcKSw6jDmiUHBBrDlCZ2wrvDkQcD
+b0fDgTUVTAcBaCPCngtRcwcCaxtaw7RcwqEGCnbCsMKJwrTDtQcHwrdzLVbCpsKG
+BwMIBE7DocOpwrEHBDhtK1bDsMKyBwTDvB9lw5Q1w70HBMK6en4EInAHCDjCvcOn
+aXPCigZoI8KFR8KyNwcHYsO8FTbDj8OyBwjCsRwDwo/DvAQGwo4Fez8nDAcCW8KU
+wovCgMO7PwcBcAnChcKkDMOXBwV6CMKDG8KVaAcIYsOXw4HDpsO6YAbCoDkeeALC
+tAbCu8K5f8OTBsOxBwY3DjnCucO9DAcGFn3ChWbDtTEHAsKTYMO2NB/DlwcCw7xr
+LsOIwptZBwjDsUvDjlDDlXAHBTIIMsOLwqM9BwfCkXjCrMOWw53DjwcCw6Vsw7/C
+l8KWPwcIw55ycljCj3UHBMOtw5dkw5EPw7MHBA0Xw7ZqwrPDjgcIw512wqspwpjC
+kwcFMcKxw57Dv3hABwUeF8KdAmXCrgcEw5XDh8KebcKzQwcDwrTDgjZvwociBwdQ
+wq43GhvDmAcJAibCjzp3FQbDhMOkOy4ZaAcBGMOow4XDgXzDkQZzWMOpADYBBwZ+
+FWbCmSgpBwQaw5QmdsK7w5EHByDCrsKOJzl3BwN0LcOobzpqBsK3e3gkK8KOBwXD
+tcOYeWc9wpIHCGnDtMOPD8OHw7oHCMOgw7VZXMOaw5UHA0htw6vDu8KQVA==
+
+oppure 
+
+Bj9JdxY/9AcCP0P+EltFBwYo+BZ6P14HAj/JaVVm9AcIrfTBs/RGBwM/KzNOZDQH
+A84FD/GiMQcFX0A/Ydz2BwK21tw/Px0HBD9rStry5QcI5m1tN1ITBwINP9NWpH4H
+BaVoLnM/FAcIoMco/Tg/BwFbK8E/acEHA6Y/NT/LpQcDATJ7Tn9DBwNWqRDId+IH
+BTUXerI/ywZoIz9HsjcHB2L8FTbP8gY6sbs/cD8HAals7WpIawcExiJmyHkYBsb7
+elE/xQcI5364ONhRBwkXG3k41PEHBOgi7j8/NQcG+noWdFHqBwe4XT/o2iUHBBrU
+Jna70QcDb0fBNRVMBwFoIz8LUXMHAmsbWvRcoQYKdrA/tPUHB7dzLVamPwcDCARO
+4emxBwQ4bStW8LIHBPwfZdQ1/QcEunp+BCJwBwg4vedpcz8GaCM/R7I3Bwdi/BU2
+z/IHCLEcAz/8BAY/BXs/JwwHAls/Pz/7PwcBcAk/pAzXBwV6CD8bP2gHCGLXweb6
+YAagOR54ArQGu7l/0wbxBwY3Djm5/QwHBhZ9P2b1MQcCP2D2NB/XBwL8ay7IP1kH
+CPFLzlDVcAcFMggyy6M9Bwc/eKzW3c8HAuVs/z8/PwcI3nJyWD91BwTt12TRD/MH
+BA0X9mqzzgcI3XarKT8/BwUxsd7/eEAHBR4XPwJlrgcE1cc/bbNDBwO0wjZvPyIH
+B1CuNxob2AcJAiY/OncVBsTkOy4ZaAcBGOjFwXzRBnNY6QA2AQcGfhVmPygpBwQa
+1CZ2u9EHByCuPyc5dwcDdC3obzpqBrd7eCQrPwcF9dh5Zz0/Bwhp9M8Px/oHCOD1
+WVza1QcICfJM2Vnm

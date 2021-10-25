@@ -16,22 +16,25 @@ import javax.swing.JOptionPane;
 import lombok.Getter;
 import lombok.Setter;
 import sm.clagenna.crypt.rsa.RsaObj;
+import sm.clagenna.crypt.view.Controllore;
 import sm.clagenna.crypt.view.MainFrame;
 
 public class AppProperties {
-  private static AppProperties   s_inst;
-  private static final String    CSZ_PROPFILE     = "RsaParams.properties";
-  private static final String    CSZ_PROP_PosX    = "frame.posX";
-  private static final String    CSZ_PROP_PosY    = "frame.posY";
-  private static final String    CSZ_PROP_LenX    = "frame.lenX";
-  private static final String    CSZ_PROP_LenY    = "frame.lenY";
-  private static final String    CSZ_PROP_LastDir = "last.dir";
+  private static AppProperties    s_inst;
+  private static final String     CSZ_PROPFILE     = "RsaParams.properties";
+  private static final String     CSZ_PROP_PosX    = "frame.posX";
+  private static final String     CSZ_PROP_PosY    = "frame.posY";
+  private static final String     CSZ_PROP_LenX    = "frame.lenX";
+  private static final String     CSZ_PROP_LenY    = "frame.lenY";
+  private static final String     CSZ_PROP_LastDir = "last.dir";
+  private static final String     CSZ_PROP_Debug   = "debug";
 
-  private MainFrame              m_frame;
-  private Properties             m_prop;
+  private MainFrame               m_frame;
+  private Properties              m_prop;
 
-  @Getter @Setter private String LastDir;
-  @Getter @Setter private String LastFile;
+  @Getter @Setter private String  LastDir;
+  @Getter @Setter private String  LastFile;
+  @Getter @Setter private boolean debug;
 
   public AppProperties(MainFrame fr) {
     m_frame = fr;
@@ -57,6 +60,8 @@ public class AppProperties {
     int y = Integer.parseInt(m_prop.getProperty(CSZ_PROP_PosY, "-1"));
     int w = Integer.parseInt(m_prop.getProperty(CSZ_PROP_LenX, "-1"));
     int h = Integer.parseInt(m_prop.getProperty(CSZ_PROP_LenY, "-1"));
+    debug = Boolean.parseBoolean(m_prop.getProperty(CSZ_PROP_Debug, "false"));
+    Controllore.getInst().setValue(Controllore.FLD_DEBUG, debug);
     if (Math.abs(x) > 0 && Math.abs(y) > 0) {
       Rectangle r = new Rectangle(x, y, w, h);
       m_frame.setBounds(r);

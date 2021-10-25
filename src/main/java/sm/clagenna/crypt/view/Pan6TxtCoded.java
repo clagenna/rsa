@@ -6,7 +6,11 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
 import java.util.List;
 import java.util.OptionalInt;
 
@@ -18,8 +22,8 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.commons.codec.binary.Base64;
-
+import lombok.Getter;
+import lombok.Setter;
 import sm.clagenna.crypt.rsa.RsaObj;
 import sm.clagenna.crypt.swing.DeCodeString;
 import sm.clagenna.crypt.swing.IRsa;
@@ -29,6 +33,9 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
 
   /** long serialVersionUID */
   private static final long                serialVersionUID = 593767533148741772L;
+  @Getter @Setter private static boolean   debug;
+  private static NumberFormat              fmt              = NumberFormat.getIntegerInstance();
+
   @SuppressWarnings("unused") private IRsa m_irsa;
   private JTextArea                        txTxtEncoded;
   private int                              maxBitsCry;
@@ -110,13 +117,16 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
       case Controllore.FLD_TXT_ORIG:
         codificaTesto((String) val);
         break;
+      case Controllore.FLD_DEBUG:
+        debug = (Boolean) val;
+        break;
     }
   }
 
   protected void txtEncoded_Update() {
     String sz = txTxtEncoded.getText();
     boolean bEna = sz != null && sz.length() > 6;
-    if ( bEna) {
+    if (bEna) {
       RsaObj rsa = MainFrame.getInst().getRsaObj();
       bEna = rsa.isPrivKeyPresent();
     }
@@ -133,23 +143,31 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
     deco.setMaxBits(rsa.getNPQmodulus());
 
     liUnoTxt = deco.toList(val, false);
-
+    if (isDebug())
+      logInfo(liUnoTxt, "cry:txt-tolist");
     liUnoCripted = new ArrayList<>();
     for (BigInteger bi : liUnoTxt) {
       bi = rsa.esponenteE(bi);
       liUnoCripted.add(bi);
     }
+    if (isDebug())
+      logInfo(liUnoCripted, "cry:list-crypt");
     OptionalInt opt = liUnoCripted.stream().mapToInt(BigInteger::bitLength).max();
     maxBitsCry = (opt.getAsInt() / shift + 1) * shift;
     deco.setMaxBits(maxBitsCry);
-    System.out.println("Max bits crypt=" + maxBitsCry);
+    if (isDebug())
+      System.out.println("cry:Max bits crypt=" + maxBitsCry);
 
     // 3) list2(BigInt) => deco() => sz2
     String szUnoCrypted = deco.toString(liUnoCripted, true);
+    if (isDebug())
+      logInfo(szUnoCrypted, "cry:list-toCryStr");
 
     // 4) sz2 => Base64
-    String szUnoCryptedB64 = Base64.encodeBase64String(szUnoCrypted.getBytes());
-
+    Encoder b64 = java.util.Base64.getEncoder();
+    String szUnoCryptedB64 = b64.encodeToString(szUnoCrypted.getBytes(StandardCharsets.UTF_8));
+    if (isDebug())
+      System.out.println("cry:Cry_base64:" + szUnoCryptedB64);
     // 5) chunk di 64 chars
     StringBuilder sb = new StringBuilder();
     for (int k = 0; k < szUnoCryptedB64.length(); k += 64) {
@@ -171,7 +189,11 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
     String szDueCryptedB64 = string.replace("\n", "");
 
     // 4) Base64 == sz2
-    String szDueCrypted = new String(Base64.decodeBase64(szDueCryptedB64));
+    Decoder b64 = java.util.Base64.getDecoder();
+    // String szDueCrypted = new String(Base64.decodeBase64(szDueCryptedB64));
+    String szDueCrypted = new String(b64.decode(szDueCryptedB64));
+    if (isDebug())
+      logInfo(szDueCrypted, "dec:B64-toCryStr");
 
     // 3) sz2 => codi() => list2(BigInt)
     deco.setShift(8);
@@ -179,18 +201,47 @@ public class Pan6TxtCoded extends JPanel implements IRsaListen {
     if (maxBitsCry != 0)
       deco.setMaxBits(maxBitsCry);
     liDueCrypted = deco.toList(szDueCrypted, true);
+    if (isDebug())
+      logInfo(liDueCrypted, "dec:list-crypt");
 
     liDueTxt = new ArrayList<>();
     for (BigInteger bi : liDueCrypted) {
       BigInteger bi2 = rsa.esponenteD(bi);
       liDueTxt.add(bi2);
     }
+    if (isDebug())
+      logInfo(liDueTxt, "dec:txt-toList");
 
     // 1) list(BigInt) => codi() => sz
-    deco.setShift(8);
     String szOut = deco.toString(liDueTxt, false);
-    System.out.println("Pan6TxtCoded.decodifica():" + szOut);
+    if (isDebug())
+      System.out.println("dec:txt:" + szOut);
     Controllore.getInst().setValue(Controllore.FLD_TXT_DECODED, szOut);
+  }
+
+  private void logInfo(List<BigInteger> liUnoTxt2, String str) {
+    System.out.println("\n-----------------------------------------------------------\n" + str);
+    liUnoTxt2 //
+        .stream() //
+        .map(d -> fmt.format(d)) //
+        .forEach(System.out::println);
+  }
+
+  private void logInfo(String szCry, String str) {
+    System.out.println("\n-----------------------------------------------------------\n" + str);
+    StringBuilder sb = new StringBuilder();
+    int k = 0;
+    for (char cc : szCry.toCharArray()) {
+      if (sb.length() > 1)
+        sb.append(",");
+      sb.append(String.valueOf((int) cc));
+      if (++k > 32) {
+        System.out.println(sb.toString());
+        sb = new StringBuilder();
+        k = 0;
+      }
+    }
+    System.out.println(sb.toString());
   }
 
 }
