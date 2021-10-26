@@ -46,6 +46,7 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
    * Launch the application.
    */
   public static void main(String[] args) {
+    System.setProperty("file.encoding", "UTF-8");
     EventQueue.invokeLater(new Runnable() {
       @Override
       public void run() {
