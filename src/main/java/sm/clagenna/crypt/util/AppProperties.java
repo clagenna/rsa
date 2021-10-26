@@ -20,21 +20,27 @@ import sm.clagenna.crypt.view.Controllore;
 import sm.clagenna.crypt.view.MainFrame;
 
 public class AppProperties {
-  private static AppProperties    s_inst;
-  private static final String     CSZ_PROPFILE     = "RsaParams.properties";
-  private static final String     CSZ_PROP_PosX    = "frame.posX";
-  private static final String     CSZ_PROP_PosY    = "frame.posY";
-  private static final String     CSZ_PROP_LenX    = "frame.lenX";
-  private static final String     CSZ_PROP_LenY    = "frame.lenY";
-  private static final String     CSZ_PROP_LastDir = "last.dir";
-  private static final String     CSZ_PROP_Debug   = "debug";
+  private static AppProperties s_inst;
+  private static final String  CSZ_PROPFILE     = "RsaParams.properties";
+  private static final String  CSZ_PROP_PosX    = "frame.posX";
+  private static final String  CSZ_PROP_PosY    = "frame.posY";
+  private static final String  CSZ_PROP_LenX    = "frame.lenX";
+  private static final String  CSZ_PROP_LenY    = "frame.lenY";
+  private static final String  CSZ_PROP_LastDir = "last.dir";
+  private static final String  CSZ_PROP_Debug   = "debug";
 
-  private MainFrame               m_frame;
-  private Properties              m_prop;
+  private MainFrame            m_frame;
+  private Properties           m_prop;
 
-  @Getter @Setter private String  LastDir;
-  @Getter @Setter private String  LastFile;
-  @Getter @Setter private boolean debug;
+  @Getter
+  @Setter
+  private String               LastDir;
+  @Getter
+  @Setter
+  private String               LastFile;
+  @Getter
+  @Setter
+  private boolean              debug;
 
   public AppProperties(MainFrame fr) {
     m_frame = fr;
@@ -84,6 +90,8 @@ public class AppProperties {
     m_prop.setProperty(CSZ_PROP_PosY, String.valueOf(y));
     m_prop.setProperty(CSZ_PROP_LenX, String.valueOf(w));
     m_prop.setProperty(CSZ_PROP_LenY, String.valueOf(h));
+
+    m_prop.setProperty(CSZ_PROP_Debug, Boolean.toString(debug));
     if (LastDir != null)
       m_prop.setProperty(CSZ_PROP_LastDir, LastDir);
     File fiProp = getFileProps();

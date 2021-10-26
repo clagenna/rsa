@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.beans.Beans;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -30,17 +31,24 @@ import sm.clagenna.crypt.swing.IRsaListen;
 import sm.clagenna.crypt.util.AppProperties;
 import sm.clagenna.crypt.util.KeyPrivFile;
 import sm.clagenna.crypt.util.KeyPubFile;
+import javax.swing.JCheckBox;
 
 public class MainFrame extends JFrame implements WindowListener, IRsaListen {
 
   /** long serialVersionUID */
-  private static final long        serialVersionUID = 333609615894254079L;
-  @Getter private static MainFrame inst;
-  private JPanel                   contentPane;
-  @Getter private IRsa             irsa;
-  @Getter private RsaObj           rsaObj;
-  @Getter private PrimiFactory     primi;
-  private AppProperties            m_appProps;
+  private static final long serialVersionUID = 333609615894254079L;
+  @Getter
+  private static MainFrame  inst;
+  private JPanel            contentPane;
+  @Getter
+  private IRsa              irsa;
+  @Getter
+  private RsaObj            rsaObj;
+  @Getter
+  private PrimiFactory      primi;
+  private AppProperties     m_appProps;
+  private JCheckBox         chkDebug;
+  private boolean           bSema;
 
   /**
    * Launch the application.
@@ -67,6 +75,8 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
   }
 
   public MainFrame() {
+    if (Beans.isDesignTime())
+      return;
     if (inst != null)
       throw new UnsupportedOperationException("MainFrame gia istanziata");
     inst = this;
@@ -96,14 +106,14 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
       }
     });
 
-    //    JMenuItem mnSalva = new JMenuItem("Salva");
-    //    mnFile.add(mnSalva);
-    //    mnSalva.addActionListener(new ActionListener() {
-    //      @Override
-    //      public void actionPerformed(ActionEvent e) {
-    //        mnuSalva_Click();
-    //      }
-    //    });
+    // JMenuItem mnSalva = new JMenuItem("Salva");
+    // mnFile.add(mnSalva);
+    // mnSalva.addActionListener(new ActionListener() {
+    // @Override
+    // public void actionPerformed(ActionEvent e) {
+    // mnuSalva_Click();
+    // }
+    // });
     mnFile.addSeparator();
 
     JMenuItem mnExit = new JMenuItem("Esci");
@@ -138,6 +148,14 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
     gbc_panGenPrimi.gridy = 0;
     gbc_panGenPrimi.gridwidth = 2;
     panDatiIniziali.add(panGenPrimi, gbc_panGenPrimi);
+
+    chkDebug = new JCheckBox("Debug");
+    chkDebug.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        chkDebug_click(e);
+      }
+    });
+    panGenPrimi.add(chkDebug, BorderLayout.WEST);
 
     JPanel panValP = new Pan2ValP(irsa);
     GridBagConstraints gbc_ValP = new GridBagConstraints();
@@ -218,6 +236,18 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
 
   }
 
+  protected void chkDebug_click(ActionEvent e) {
+    JCheckBox chk = (JCheckBox) e.getSource();
+    Boolean b = chk.isSelected();
+    try {
+      bSema = true;
+      Controllore.getInst().setValue(Controllore.FLD_DEBUG, b);
+      AppProperties.getInst().setDebug(b);
+    } finally {
+      bSema = false;
+    }
+  }
+
   private void mnuLeggi_Click() {
     AppProperties props = AppProperties.getInst();
     JFileChooser fch = creaFileChooser();
@@ -249,32 +279,33 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
     return fch;
   }
 
-  //  protected void mnuSalva_Click() {
-  //    RsaObj rsa = MainFrame.getInst().getRsaObj();
-  //    String keyNam = rsa.getKeyName();
-  //    if (keyNam == null) {
-  //      JOptionPane.showConfirmDialog(this, "Manca il nome del Key file", "Fornire il nome", JOptionPane.OK_OPTION);
-  //      return;
-  //    }
+  // protected void mnuSalva_Click() {
+  // RsaObj rsa = MainFrame.getInst().getRsaObj();
+  // String keyNam = rsa.getKeyName();
+  // if (keyNam == null) {
+  // JOptionPane.showConfirmDialog(this, "Manca il nome del Key file", "Fornire il
+  // nome", JOptionPane.OK_OPTION);
+  // return;
+  // }
   //
-  //    JFileChooser fch = new JFileChooser();
-  //    AppProperties props = AppProperties.getInst();
-  //    String lastDir = System.getProperty("user.dir");
+  // JFileChooser fch = new JFileChooser();
+  // AppProperties props = AppProperties.getInst();
+  // String lastDir = System.getProperty("user.dir");
   //
-  //    String szd = props.getLastDir();
-  //    if (szd != null)
-  //      lastDir = szd;
-  //    fch.setCurrentDirectory(new File(lastDir));
-  //    fch.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+  // String szd = props.getLastDir();
+  // if (szd != null)
+  // lastDir = szd;
+  // fch.setCurrentDirectory(new File(lastDir));
+  // fch.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
   //
-  //    int nRes = fch.showOpenDialog(this);
-  //    if (nRes != JFileChooser.APPROVE_OPTION) {
-  //      System.out.println("Nessun direttorio scelto !");
-  //      return;
-  //    }
-  //    File selFi = fch.getSelectedFile();
-  //    props.setLastDir(selFi.getAbsolutePath());
-  //  }
+  // int nRes = fch.showOpenDialog(this);
+  // if (nRes != JFileChooser.APPROVE_OPTION) {
+  // System.out.println("Nessun direttorio scelto !");
+  // return;
+  // }
+  // File selFi = fch.getSelectedFile();
+  // props.setLastDir(selFi.getAbsolutePath());
+  // }
 
   protected void mnuExit_Click() {
     if (m_appProps == null)
@@ -285,7 +316,8 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
 
   @Override
   public void windowOpened(WindowEvent e) {
-    //    System.out.println("MainFrame.windowOpened() : user.home=" + System.getProperty("user.home"));
+    // System.out.println("MainFrame.windowOpened() : user.home=" +
+    // System.getProperty("user.home"));
     if (m_appProps == null)
       m_appProps = new AppProperties(this);
     m_appProps.leggiProperties();
@@ -326,6 +358,8 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
 
   @Override
   public void valueChanged(String id, Object val) {
+    if (bSema)
+      return;
     switch (id) {
       case Controllore.FLD_KEYNAME:
         String pup = "*no key*";
@@ -336,8 +370,10 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
         String tit = String.format("Key %s (%s)", val, pup);
         this.setTitle(tit);
         break;
+      case Controllore.FLD_DEBUG:
+        chkDebug.setSelected((Boolean) val);
+        break;
     }
-
   }
 
 }

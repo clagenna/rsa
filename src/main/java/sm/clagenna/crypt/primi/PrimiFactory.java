@@ -1,5 +1,6 @@
 package sm.clagenna.crypt.primi;
 
+import java.beans.Beans;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,15 @@ public class PrimiFactory {
   private static final long          MAXV = 2_000_000_000L;
   private static final DecimalFormat fmt  = new DecimalFormat("#,###,###,###,###");
 
-  @Getter private List<Long>         liPrimi;
+  @Getter
+  private List<Long>                 liPrimi;
   PrimiWorker                        swingW;
   private int                        progrSteps;
   private long                       kProgr;
 
   public PrimiFactory() {
+    if (Beans.isDesignTime())
+      return;
     if (s_inst != null)
       throw new UnsupportedOperationException("PrimiFactory3 è già stata istanziata !");
     s_inst = this;
@@ -76,12 +80,12 @@ public class PrimiFactory {
   }
 
   public boolean isPrimo(long vv) {
-    // 1)  i primi 2,3,5,7 sono dispari oppure = 2
+    // 1) i primi 2,3,5,7 sono dispari oppure = 2
     boolean bRet = vv == 2 || (vv & 1) != 0;
     if (vv <= 7 || !bRet)
       return bRet;
 
-    // 2)  i prossimi primi saranno distribuiti *SOLO* su (6n-1,6n+1)
+    // 2) i prossimi primi saranno distribuiti *SOLO* su (6n-1,6n+1)
     if ( (vv + 1) % 6 != 0 && (vv - 1) % 6 != 0)
       return false;
 
