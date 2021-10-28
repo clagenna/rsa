@@ -12,16 +12,23 @@ import java.awt.event.WindowListener;
 import java.beans.Beans;
 import java.io.File;
 
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import lombok.Getter;
 import sm.clagenna.crypt.primi.PrimiFactory;
@@ -31,29 +38,31 @@ import sm.clagenna.crypt.swing.IRsaListen;
 import sm.clagenna.crypt.util.AppProperties;
 import sm.clagenna.crypt.util.KeyPrivFile;
 import sm.clagenna.crypt.util.KeyPubFile;
-import javax.swing.JCheckBox;
 
 public class MainFrame extends JFrame implements WindowListener, IRsaListen {
 
   /** long serialVersionUID */
-  private static final long serialVersionUID = 333609615894254079L;
+  private static final long   serialVersionUID = 333609615894254079L;
+
+  private static final Logger s_log            = LogManager.getLogger(MainFrame.class);
   @Getter
-  private static MainFrame  inst;
-  private JPanel            contentPane;
+  private static MainFrame    inst;
+  private JPanel              contentPane;
   @Getter
-  private IRsa              irsa;
+  private IRsa                irsa;
   @Getter
-  private RsaObj            rsaObj;
+  private RsaObj              rsaObj;
   @Getter
-  private PrimiFactory      primi;
-  private AppProperties     m_appProps;
-  private JCheckBox         chkDebug;
-  private boolean           bSema;
+  private PrimiFactory        primi;
+  private AppProperties       m_appProps;
+  private JCheckBox           chkDebug;
+  private boolean             bSema;
 
   /**
    * Launch the application.
    */
   public static void main(String[] args) {
+    s_log.debug("file.encoding={}", System.getProperty("file.encoding"));
     System.setProperty("file.encoding", "UTF-8");
     EventQueue.invokeLater(new Runnable() {
       @Override
@@ -124,9 +133,9 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
         mnuExit_Click();
       }
     });
+
     contentPane = new JPanel();
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-    setContentPane(contentPane);
     contentPane.setLayout(new BorderLayout(0, 0));
 
     JTabbedPane tabPane = new JTabbedPane();
@@ -151,6 +160,7 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
 
     chkDebug = new JCheckBox("Debug");
     chkDebug.addActionListener(new ActionListener() {
+      @Override
       public void actionPerformed(ActionEvent e) {
         chkDebug_click(e);
       }
@@ -234,6 +244,20 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
 
     contentPane.add(tabPane, BorderLayout.CENTER);
 
+    JTextArea txLog = new JTextArea();
+    JScrollPane scrlLog = new JScrollPane(txLog, //
+        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+    JPanel contentPaneOk = new JPanel(new BorderLayout(0, 0));
+    JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, contentPane, scrlLog);
+    splitPane.setOneTouchExpandable(true);
+    splitPane.setDividerLocation(600);
+    
+    contentPaneOk.add(splitPane, BorderLayout.CENTER);
+    setContentPane(contentPaneOk);
+
+    setContentPane(contentPaneOk);
   }
 
   protected void chkDebug_click(ActionEvent e) {
@@ -254,7 +278,7 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
     fch.setFileSelectionMode(JFileChooser.FILES_ONLY);
     int nRes = fch.showOpenDialog(this);
     if (nRes != JFileChooser.APPROVE_OPTION) {
-      System.out.println("Nessun file scelto !");
+      s_log.warn("Nessun file scelto !");
       return;
     }
     File selFi = fch.getSelectedFile();
@@ -317,7 +341,7 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
   @Override
   public void windowOpened(WindowEvent e) {
     // System.out.println("MainFrame.windowOpened() : user.home=" +
-    // System.getProperty("user.home"));
+    s_log.debug("Window Open, user.home={}", System.getProperty("user.home"));
     if (m_appProps == null)
       m_appProps = new AppProperties(this);
     m_appProps.leggiProperties();
@@ -325,7 +349,7 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
 
   @Override
   public void windowClosing(WindowEvent e) {
-    System.out.println("MainFrame.windowClosing()");
+    s_log.info("Window closing");
     if (m_appProps == null)
       m_appProps = new AppProperties(this);
     m_appProps.salvaProperties();
@@ -333,7 +357,7 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
 
   @Override
   public void windowClosed(WindowEvent e) {
-    System.out.println("MainFrame.windowClosed()");
+    s_log.info("MainFrame.windowClosed()");
   }
 
   @Override

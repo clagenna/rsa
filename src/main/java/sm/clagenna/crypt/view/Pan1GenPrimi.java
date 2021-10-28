@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
+import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,6 +18,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import sm.clagenna.crypt.swing.IRsa;
 import sm.clagenna.crypt.swing.IRsaListen;
@@ -26,13 +30,16 @@ import sm.clagenna.crypt.util.PrimiWorker;
 public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeListener {
 
   /** long serialVersionUID */
-  private static final long serialVersionUID = -4193143331761193489L;
-  private NumTextField      txQtaPrimi;
-  private NumTextField      txPrimiGenerati;
-  private IRsa              m_irsa;
-  private JButton           btGeneraPrimi;
-  private PrimiWorker       primiGen;
-  private JProgressBar      progressBar;
+  private static final long         serialVersionUID = -4193143331761193489L;
+
+  private static final Logger       s_log            = LogManager.getLogger(Pan1GenPrimi.class);
+  private static final NumberFormat s_fmt            = NumberFormat.getIntegerInstance();
+  private NumTextField              txQtaPrimi;
+  private NumTextField              txPrimiGenerati;
+  private IRsa                      m_irsa;
+  private JButton                   btGeneraPrimi;
+  private PrimiWorker               primiGen;
+  private JProgressBar              progressBar;
 
   public Pan1GenPrimi() {
     initComponents();
@@ -135,8 +142,10 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeLi
       primiGen = new PrimiWorker();
       primiGen.addPropertyChangeListener(this);
       int qtaP = ((BigInteger) txQtaPrimi.getValue()).intValue();
+      s_log.debug("Genero {} primi", qtaP);
       primiGen.setQtaPrimi(qtaP);
       primiGen.execute();
+      s_log.debug("Generati {} primi", qtaP);
     } finally {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
@@ -148,6 +157,8 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeLi
       case Controllore.FLD_QTA_PRIMI:
         // System.out.printf("Pan1GenPrimi.valueChanged(%s)\n",id);
         BigInteger bi = (BigInteger) val;
+        if (bi != null)
+          s_log.debug("Cambio qta Primi {}", s_fmt.format(bi));
         btGeneraPrimi.setEnabled(bi != null && bi.signum() > 0);
         break;
       case Controllore.FLD_QTAPRIMIGEN:

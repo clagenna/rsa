@@ -1,0 +1,53 @@
+Controllore.setValue("debug", Boolean)
+Controllore.setValue("KeyName", String)
+Controllore.setValue("Modulus", 434.718.252.260.689)
+Controllore.setValue("Modulus", 434.718.252.260.689)
+Controllore.setValue("FiTotient", 434.718.187.816.500)
+Controllore.setValue("FiTotient", 434.718.187.816.500)
+Controllore.setValue("Carmicael", 72.453.031.302.750)
+Controllore.setValue("Carmicael", 72.453.031.302.750)
+Controllore.setValue("NumeroP", 56.789.251)
+---------------------------------------------------------------
+Sous aucun prétexte
+Je ne veux
+Avoir de réflexes
+Malheureux
+Il faut que tu m'expliques
+Un peu mieux
+Comment te dire adieu
+Mon cœur de silex
+Vite prend feu
+Ton cœur de pyrex
+Résiste au feu
+Je suis bien perplexe
+Je ne veux
+Me résoudre aux adieux
+Je sais bien qu'un ex-amour n'a pas de chance, ou si peu
+Mais pour moi un explication vaudrait mieux
+Sous aucun prétexte
+Je ne veux
+Devant toi surexposer mes yeux
+Derrière un kleenex
+Je saurais mieux
+Comment te dire adieu
+Comment te dire adieu
+----------------------------------------------------------------
+BwEtEkc9dRkGwrE9w4ZXBykGw5bDpcObFMOJXAZNwpk8wozCo0UGJ8KQw69tecO2
+BlrCljQyemkHARbDs3xoRjcGw5DDvzwGOxkGWcOZw73DqMOzJQcBajYUW8KtNQYD
+f8KKXsOYwqQGAsO1dTsUCgcBZEbDt8OQVCsGTcO4w4nDjAYLBgHDkcKlw7p+CQcB
+bSjDkDomwqIHATUUGcKrKGsGFcK7wpBqw7IkBsKZw7BGN8O7UAYQdQLCt8OHwrIH
+ASUrcsKzI8KBBlnDvsKXMcOSKQbCvMKqa3PCg8O1BsOmw7UhACVHBwEMZsKvJ8OK
+fQcBdMKSwqzDhzw7Bjlvw4MDw6PDlwbDrcK9NQ5lw6oHAVrDvcKOw59/wqkHAStZ
+E8KcOMOuBsKdNXFnw7NCBsKBwpDDhjstRgZAbMKlTMK7w5sGf0fClcOWwoDDsQcB
+blTDhcOQw6PCswZIImHDnz0+BgPCjH7ChGHDqQbDs1t/wok2wrMGwrbDk8OAcGfC
+sQYjEx7Ci8KrHAbDscKRwpHCoMK7JwYTMsOebcOAw5kHAXzCmhvDqHUfBsKGwrPC
+jMK8wqcxBwEgHsOUf8KRdQbDgsK9bgrClFUGwrrDv8KMbxlzBsK3BEdZWHwHAWE6
+w6XCpyXCmAYaw6jDtzTCixIGwqdBw77CpMOWfwYrwqvDvsK5eFcGwonCmkBAw5Zp
+BsKlbgXCvTQuBwEnOlrDoxcyBkpyHhEwRwbCicK0eMO0wqMCBjjCnMK2woHCnz0G
+w4gYwpDCsl/CiQcBeMKmQsOrwptXBwFfIzMfVxsGUMKKwqfDi8KYdgbDlcKveQAs
+wqMGGSvCr3rChBEGwrkLNFVmUwbCrFjDscO1wq1zBwEWw6XCusK5wrsvBsOBw67D
+ljY/w64HASciw7PCscK3w4AGe38VccK7wq0HAULDjGHDsG/CuAbDu8KMUBnCn8Oo
+BsORwp1zw6bCmXIGw43CssKORMK2wp4Gw79+w4vCmcOPawbDgMOVwr3DgcOmwqAG
+w5szw7BtfA0Gw4HDh8KISFjCmQYVwrvCkGrDsiQGwpnDsEY3w7tQBhB1AsK3w4fC
+sgcBZsKjb2hDwr0=
+----------------------------------------------------------------

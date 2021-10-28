@@ -115,8 +115,8 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-						<!-- 	mainClass>sm.clagenna.crypt.view.MainFrame</mainClass -->
-						<mainClass>sm.clagenna.crypt.view.MainFrame</mainClass>
+							<!-- mainClass>sm.clagenna.crypt.view.MainFrame</mainClass -->
+							<mainClass>sm.clagenna.crypt.view.MainFrame</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

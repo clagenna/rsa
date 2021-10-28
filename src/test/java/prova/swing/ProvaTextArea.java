@@ -94,6 +94,7 @@ public class ProvaTextArea {
         @Override
         protected void process(List<String> chunks) {
           for (String chunk : chunks) {
+            System.out.println("ProvaTextArea.BtnListener.process():chunk=" + chunk);
             textarea.append(chunk + "\n");
           }
         }
