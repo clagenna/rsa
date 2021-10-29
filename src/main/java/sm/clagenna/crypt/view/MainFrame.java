@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.Beans;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import javax.swing.JCheckBox;
@@ -23,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
@@ -35,11 +38,13 @@ import sm.clagenna.crypt.primi.PrimiFactory;
 import sm.clagenna.crypt.rsa.RsaObj;
 import sm.clagenna.crypt.swing.IRsa;
 import sm.clagenna.crypt.swing.IRsaListen;
+import sm.clagenna.crypt.swing.log.MioLogger;
+import sm.clagenna.crypt.swing.log.PanLogGrid;
 import sm.clagenna.crypt.util.AppProperties;
 import sm.clagenna.crypt.util.KeyPrivFile;
 import sm.clagenna.crypt.util.KeyPubFile;
 
-public class MainFrame extends JFrame implements WindowListener, IRsaListen {
+public class MainFrame extends JFrame implements WindowListener, IRsaListen, PropertyChangeListener {
 
   /** long serialVersionUID */
   private static final long   serialVersionUID = 333609615894254079L;
@@ -47,7 +52,7 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
   private static final Logger s_log            = LogManager.getLogger(MainFrame.class);
   @Getter
   private static MainFrame    inst;
-  private JPanel              contentPane;
+  private JPanel              panRSA;
   @Getter
   private IRsa                irsa;
   @Getter
@@ -57,6 +62,8 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
   private AppProperties       m_appProps;
   private JCheckBox           chkDebug;
   private boolean             bSema;
+
+  private MioLogger           logger;
 
   /**
    * Launch the application.
@@ -94,6 +101,8 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
     rsaObj = new RsaObj();
     primi = new PrimiFactory();
     addWindowListener(this);
+    logger = new MioLogger();
+    logger.addLogListener(this);
     initComponents();
   }
 
@@ -134,9 +143,9 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
       }
     });
 
-    contentPane = new JPanel();
-    contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-    contentPane.setLayout(new BorderLayout(0, 0));
+    panRSA = new JPanel();
+    panRSA.setBorder(new EmptyBorder(5, 5, 5, 5));
+    panRSA.setLayout(new BorderLayout(0, 0));
 
     JTabbedPane tabPane = new JTabbedPane();
     JPanel panDatiIniziali = new JPanel();
@@ -242,18 +251,19 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
     gbc_panTxtDecript.gridx = 0;
     panDatiTesto.add(panTxtDecript, gbc_panTxtDecript);
 
-    contentPane.add(tabPane, BorderLayout.CENTER);
+    panRSA.add(tabPane, BorderLayout.CENTER);
 
     JTextArea txLog = new JTextArea();
-    JScrollPane scrlLog = new JScrollPane(txLog, //
-        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//    JScrollPane scrlLog = new JScrollPane(txLog, //
+//        ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    
+    PanLogGrid scrlLog = new PanLogGrid();
 
     JPanel contentPaneOk = new JPanel(new BorderLayout(0, 0));
-    JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, contentPane, scrlLog);
+    JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panRSA, scrlLog);
     splitPane.setOneTouchExpandable(true);
     splitPane.setDividerLocation(600);
-    
+
     contentPaneOk.add(splitPane, BorderLayout.CENTER);
     setContentPane(contentPaneOk);
 
@@ -398,6 +408,16 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen {
         chkDebug.setSelected((Boolean) val);
         break;
     }
+  }
+
+  /**
+   * Propety change listener per reagire sugli eventi di {@link MioLogger}
+   *
+   * @param evt
+   */
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    System.out.println("MainFrame.propertyChange():" + evt.toString());
   }
 
 }

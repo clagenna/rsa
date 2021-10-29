@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration Status="DEBUG"  packages="sm.clagenna.crypt.log">
+<Configuration packages="sm.clagenna.crypt.log" >
 	<Appenders>
-		<File name="rsa" fileName="rsaData.log" append="true">
-			<PatternLayout pattern="%d %-5p %c{2}:%L - %m%n"/>
+		<File name="rsaLog" fileName="rsaLog.log" append="true">
+			<PatternLayout pattern="%d %-5p %c{2}:%L - %m%n" />
 		</File>
+		<RollingFile name="RollingFile">
+			<FileName>log/rsaLog.log</FileName>
+			<FilePattern>log/rsaLog-logs/%d{yyyy-MM-dd}.zip</FilePattern>
+			<PatternLayout>
+				<!--  Pattern>%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} -	%msg%n</Pattern -->
+				<Pattern>%d %-5p %c{2}:%L - %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
 		<!-- vedi pattern https://logging.apache.org/log4j/2.x/manual/layouts.html -->
 		<Console name="STDOUT" target="SYSTEM_OUT">
-			<PatternLayout pattern="%d %-5p %c{2}:%L - %m%n"/>
+			<PatternLayout pattern="%d %-5p %c{2}:%L - %m%n" />
 		</Console>
-		<MioAppender name="MIOAPPENDER">
-			<!--  PatternLayout pattern="serial:%sn |Date:%d |level:%level |class:%logger |method:%M() |line:%L |Location: %l |message:%m%n"/ -->
-			<PatternLayout pattern="%logger[%L]\t%d\t%level\t%m%n"/>
-		</MioAppender>
 	</Appenders>
 	<Loggers>
 		<Root level="debug">
-			<!--
- <AppenderRef ref="STDOUT" / 
-			-->
-			<AppenderRef ref="MIOAPPENDER"/>
-			<AppenderRef ref="rsa"/>
+			<AppenderRef ref="STDOUT" />
+			<AppenderRef ref="RollingFile" />
 		</Root>
 		<logger name="org.apache.xml" level="info">
-			<AppenderRef ref="STDOUT"/>
+			<AppenderRef ref="STDOUT" />
 		</logger>
 	</Loggers>
 </Configuration>

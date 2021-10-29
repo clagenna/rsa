@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigInteger;
+import java.text.NumberFormat;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -19,29 +20,40 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import sm.clagenna.crypt.primi.PrimiFactory;
 import sm.clagenna.crypt.swing.IRsa;
 import sm.clagenna.crypt.swing.IRsaListen;
 import sm.clagenna.crypt.swing.NumTextField;
+import sm.clagenna.crypt.swing.log.MioLogger;
 
 public class Pan2ValP extends JPanel implements IRsaListen {
   /** long serialVersionUID */
-  private static final long     serialVersionUID = -8805994965261663006L;
-  private NumTextField          txPrimoIniziale;
-  private JComboBox<BigInteger> cbValP;
-  private IRsa                  m_irsa;
-  private JSpinner              spinner;
-  private boolean               bSemAddCbValP;
+  private static final long         serialVersionUID = -8805994965261663006L;
+
+  private static final Logger       s_log            = LogManager.getLogger(Pan2ValP.class);
+  private static final NumberFormat s_fmt            = NumberFormat.getIntegerInstance();
+
+  private NumTextField              txPrimoIniziale;
+  private JComboBox<BigInteger>     cbValP;
+  private IRsa                      m_irsa;
+  private JSpinner                  spinner;
+  private boolean                   bSemAddCbValP;
+  private MioLogger                 mioLog;
 
   /**
    * Create the panel.
    */
   public Pan2ValP() {
+    mioLog = MioLogger.getInst();
     initComponents();
   }
 
   public Pan2ValP(IRsa p_irsa) {
     m_irsa = p_irsa;
+    mioLog = MioLogger.getInst();
     Controllore.getInst().addListener(this);
     initComponents();
   }
@@ -167,6 +179,8 @@ public class Pan2ValP extends JPanel implements IRsaListen {
       return;
     BigInteger bi = (BigInteger) item;
     Controllore.getInst().setValue(Controllore.FLD_NP, bi);
+    mioLog.log(String.format("Scelto Primo P=%s", s_fmt.format(bi)));
+    s_log.debug(mioLog.getLastMessaggio());
   }
 
 }

@@ -1,0 +1,7 @@
+2021-10-29 16:11:29,837 WARN  log.MioLogger:107 - Prova messaggio gravita=Warn
+2021-10-29 16:13:24,555 ERROR log.MioLogger:107 - Prova messaggio gravita=Err
+2021-10-29 16:14:04,495 INFO  log.MioLogger:108 - guarda qui
+2021-10-29 16:15:32,923 INFO  log.MioLogger:107 - Prova messaggio gravita=Log
+2021-10-29 16:16:27,130 INFO  log.MioLogger:110 - Prova messaggio gravita=Log
+2021-10-29 16:18:17,845 INFO  swing.ProvaLogPanel:31 - Istanzio prima MioLogger
+2021-10-29 16:20:03,047 INFO  log.MioLogger:110 - Prova messaggio gravita=Log

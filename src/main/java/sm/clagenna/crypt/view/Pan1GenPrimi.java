@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import sm.clagenna.crypt.swing.IRsa;
 import sm.clagenna.crypt.swing.IRsaListen;
 import sm.clagenna.crypt.swing.NumTextField;
+import sm.clagenna.crypt.swing.log.MioLogger;
 import sm.clagenna.crypt.util.PrimiWorker;
 
 public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeListener {
@@ -40,13 +41,16 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeLi
   private JButton                   btGeneraPrimi;
   private PrimiWorker               primiGen;
   private JProgressBar              progressBar;
+  private MioLogger                 mioLog;
 
   public Pan1GenPrimi() {
+    mioLog = MioLogger.getInst();
     initComponents();
   }
 
   public Pan1GenPrimi(IRsa p_irsa) {
     m_irsa = p_irsa;
+    mioLog = MioLogger.getInst();
     Controllore.getInst().addListener(this);
     initComponents();
   }
@@ -157,14 +161,18 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeLi
       case Controllore.FLD_QTA_PRIMI:
         // System.out.printf("Pan1GenPrimi.valueChanged(%s)\n",id);
         BigInteger bi = (BigInteger) val;
-        if (bi != null)
-          s_log.debug("Cambio qta Primi {}", s_fmt.format(bi));
+        if (bi != null) {
+          mioLog.debug(String.format("Cambio qta Primi %s", s_fmt.format(bi)));
+          s_log.debug(mioLog.getLastMessaggio());
+        }
         btGeneraPrimi.setEnabled(bi != null && bi.signum() > 0);
         break;
       case Controllore.FLD_QTAPRIMIGEN:
         // System.out.printf("Pan1GenPrimi.valueChanged(%s)\n",id);
         Integer ii = (Integer) val;
         txPrimiGenerati.setValue(BigInteger.valueOf(ii.longValue()));
+        mioLog.log(String.format("Primi generati:%s", s_fmt.format(ii)));
+        s_log.info(mioLog.getLastMessaggio());
         break;
     }
 
