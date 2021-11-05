@@ -20,7 +20,6 @@ public class IntComboBoxRenderer extends DefaultListCellRenderer {
     intFmt = NumberFormat.getIntegerInstance();
   }
 
-  @SuppressWarnings("unused")
   @Override
   public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index, boolean isSelected,
       boolean cellHasFocus) {
@@ -35,7 +34,7 @@ public class IntComboBoxRenderer extends DefaultListCellRenderer {
       setBackground(list.getBackground());
       setForeground(list.getForeground());
     }
-    // Object obj = list. 
+    // Object obj = list.
     setText(intFmt.format(bi));
     return this;
   }

@@ -8,6 +8,7 @@ import java.util.Base64.Encoder;
 import java.util.List;
 
 public class ProvaB64 {
+  @SuppressWarnings("unused")
   private List<Character> liChars = new ArrayList<Character>();
 
   public static void main(String[] args) {

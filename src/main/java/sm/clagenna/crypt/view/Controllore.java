@@ -14,6 +14,7 @@ import sm.clagenna.crypt.swing.IRsaListen;
 public class Controllore implements IRsa {
 
   private static final Logger s_log               = LogManager.getLogger(Controllore.class);
+  /** singleton instance */
   private static Controllore  s_inst;
 
   public static final String  FLD_QTA_PRIMI       = "QtaPrimi";

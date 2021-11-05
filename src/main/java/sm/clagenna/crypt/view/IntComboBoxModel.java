@@ -18,13 +18,11 @@ public class IntComboBoxModel extends DefaultComboBoxModel<BigInteger> {
 
   @Override
   public Object getSelectedItem() {
-    // TODO Auto-generated method stub
     return super.getSelectedItem();
   }
 
   @Override
   public void setSelectedItem(Object anObject) {
-    // TODO Auto-generated method stub
     super.setSelectedItem(anObject);
   }
 

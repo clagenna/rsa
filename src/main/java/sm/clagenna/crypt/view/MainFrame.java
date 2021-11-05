@@ -21,11 +21,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
@@ -253,10 +250,10 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen, Pro
 
     panRSA.add(tabPane, BorderLayout.CENTER);
 
-    JTextArea txLog = new JTextArea();
-//    JScrollPane scrlLog = new JScrollPane(txLog, //
-//        ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    
+    //JTextArea txLog = new JTextArea();
+    //    JScrollPane scrlLog = new JScrollPane(txLog, //
+    //        ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
     PanLogGrid scrlLog = new PanLogGrid();
 
     JPanel contentPaneOk = new JPanel(new BorderLayout(0, 0));

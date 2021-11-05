@@ -8,7 +8,7 @@
 	<name>rsa Maven Jar</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<lo4j2.vers>2.14.0</lo4j2.vers>
+		<log4j2.vers>2.14.0</log4j2.vers>
 		<java.version>17</java.version>
 		<lombok.version>1.18.20</lombok.version>
 	</properties>
@@ -61,12 +61,12 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
-			<version>${lo4j2.vers}</version>
+			<version>${log4j2.vers}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-			<version>${lo4j2.vers}</version>
+			<version>${log4j2.vers}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -91,6 +91,13 @@
 					<compilerArgs>
 						<!-- arg -illegal-access=permit /arg -->
 					</compilerArgs>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -133,13 +140,6 @@
 							<!-- </descriptors> -->
 							<finalName>rsa</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
-							<annotationProcessorPaths>
-								<path>
-									<groupId>org.projectlombok</groupId>
-									<artifactId>lombok</artifactId>
-									<version>${lombok.version}</version>
-								</path>
-							</annotationProcessorPaths>
 						</configuration>
 					</execution>
 				</executions>

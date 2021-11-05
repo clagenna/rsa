@@ -1,0 +1,11 @@
+#RSA  key tipo priv
+#Mon Nov 01 09:25:57 CET 2021
+KeyName=vattelap
+Key.Type=priv
+Carmicael=6659215450056
+FiTotient=13318430900112
+NumeroD=12091733317207
+NumeroE=3329607725047
+Modulus=13318438924151
+NumeroP=2345327
+NumeroQ=5678713

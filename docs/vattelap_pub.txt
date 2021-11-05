@@ -1,0 +1,7 @@
+#RSA  key tipo pub
+#Mon Nov 01 09:26:02 CET 2021
+KeyName=vattelap
+Key.Type=pub
+FiTotient=13318430900112
+NumeroE=3329607725047
+Modulus=13318438924151

@@ -17,29 +17,21 @@ import sm.clagenna.crypt.view.Controllore;
 
 public class RsaObj implements IRsaListen {
 
-  private static final Logger     s_log = LogManager.getLogger(RsaObj.class);
-  private static final BigInteger UNO   = BigInteger.ONE;
+  private static final Logger        s_log = LogManager.getLogger(RsaObj.class);
+  private static final BigInteger    UNO   = BigInteger.ONE;
   // private static int                 MAX_BIT = 64;
   // private static final BigInteger    DUE = BigInteger.valueOf(2);
 
-  @Getter @Setter
-  private String                  keyName;
-  @Getter
-  private BigInteger              nP;
-  @Getter
-  private BigInteger              nQ;
-  @Getter @Setter
-  private BigInteger              nPQmodulus;
-  @Getter @Setter
-  private BigInteger              nPQTotientFi;
-  @Getter @Setter
-  private BigInteger              nCarmichael;
-  @Getter @Setter
-  private BigInteger              nE;
-  @Getter @Setter
-  private BigInteger              nD;
-  private long                    m_nProbes;
-  private NumberFormat            fmt;
+  @Getter @Setter private String     keyName;
+  @Getter private BigInteger         nP;
+  @Getter private BigInteger         nQ;
+  @Getter @Setter private BigInteger nPQmodulus;
+  @Getter @Setter private BigInteger nPQTotientFi;
+  @Getter @Setter private BigInteger nCarmichael;
+  @Getter @Setter private BigInteger nE;
+  @Getter @Setter private BigInteger nD;
+  private long                       m_nProbes;
+  private NumberFormat               fmt;
   // private BigInteger              m_GuessKprev;
   // private BigInteger[]               arrExp;
 
