@@ -77,6 +77,7 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     add(lbKeyName, gbc_lbKeyName);
 
     txKeyName = new JTextField();
+    txKeyName.setToolTipText("Nome del file di save delle Key (va digitato prima di calcolare E e D)");
     txKeyName.getDocument().addDocumentListener(new DocumentListener() {
       @Override
       public void insertUpdate(DocumentEvent e) {
@@ -276,6 +277,8 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
           btSavePriv.setEnabled(rsa.isPresentKeyName() && rsa.isPresentPQ());
           break;
       }
+    } catch (Exception e) {
+      e.printStackTrace();
     } finally {
       bSemValueChange = false;
     }
@@ -284,11 +287,11 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
   protected void keyName_upd() {
     if (bSemValueChange)
       return;
+    String szK = null;
+    Controllore cnt = Controllore.getInst();
     try {
-
       bSemValueChange = true;
-      Controllore cnt = Controllore.getInst();
-      String szK = txKeyName.getText();
+      szK = txKeyName.getText();
       RsaObj rsa = MainFrame.getInst().getRsaObj();
       rsa.setKeyName(szK);
       if (szK != null)

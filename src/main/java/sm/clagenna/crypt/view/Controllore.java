@@ -39,6 +39,7 @@ public class Controllore implements IRsa {
   public static final String  FLD_TXT_DECODED     = "TxtDecoded";
 
   public static final String  FLD_QTAPRIMIGEN     = "QtaPrimiGen";
+  public static final String  FLD_MAXPRIMO        = "MaxPrimo";
 
   private List<IRsaListen>    m_listeners;
 

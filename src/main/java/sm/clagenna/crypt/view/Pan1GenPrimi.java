@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 
@@ -104,7 +105,7 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeLi
     gbc_btGeneraPrimi.gridy = 0;
     fldSet.add(btGeneraPrimi, gbc_btGeneraPrimi);
 
-    JLabel lblNewLabel_1 = new JLabel("Generati");
+    JLabel lblNewLabel_1 = new JLabel("Max Primo");
     GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
     gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
     gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
@@ -112,7 +113,7 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeLi
     gbc_lblNewLabel_1.gridy = 0;
     fldSet.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
-    txPrimiGenerati = new NumTextField(Controllore.FLD_PRIMI_GENERATI);
+    txPrimiGenerati = new NumTextField(Controllore.FLD_MAXPRIMO);
     txPrimiGenerati.addIRsaListener(m_irsa);
     txPrimiGenerati.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -167,11 +168,18 @@ public class Pan1GenPrimi extends JPanel implements IRsaListen, PropertyChangeLi
         }
         btGeneraPrimi.setEnabled(bi != null && bi.signum() > 0);
         break;
-      case Controllore.FLD_QTAPRIMIGEN:
+      //      case Controllore.FLD_QTAPRIMIGEN:
+      //        // System.out.printf("Pan1GenPrimi.valueChanged(%s)\n",id);
+      //        Integer ii = (Integer) val;
+      //        txPrimiGenerati.setValue(BigInteger.valueOf(ii.longValue()));
+      //        mioLog.log(String.format("Primi generati:%s", s_fmt.format(ii)));
+      //        s_log.info(mioLog.getLastMessaggio());
+      //        break;
+      case Controllore.FLD_MAXPRIMO:
         // System.out.printf("Pan1GenPrimi.valueChanged(%s)\n",id);
-        Integer ii = (Integer) val;
-        txPrimiGenerati.setValue(BigInteger.valueOf(ii.longValue()));
-        mioLog.log(String.format("Primi generati:%s", s_fmt.format(ii)));
+        BigInteger il = (BigInteger) val;
+        txPrimiGenerati.setValue(il);
+        mioLog.log(String.format("Max Primo:%s", s_fmt.format(il)));
         s_log.info(mioLog.getLastMessaggio());
         break;
     }

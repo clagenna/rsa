@@ -50,7 +50,7 @@ public class NumTextField extends JFormattedTextField {
 
   private static final Color     ERROR_BACKGROUND_COLOR = new Color(255, 215, 215);
   private static final Color     ERROR_FOREGROUND_COLOR = new Color(192, 0, 0);
-  @Setter private static boolean debug                = false;
+  @Setter private static boolean debug                  = false;
 
   private Color                  fBackground, fForeground;
   private String                 name;
@@ -74,16 +74,19 @@ public class NumTextField extends JFormattedTextField {
     getDocument().addDocumentListener(new DocumentListener() {
       @Override
       public void insertUpdate(DocumentEvent e) {
+        System.out.println("NumTextField.updateBackgroundOnEachUpdate() --> insertUpdate()");
         updateBackground();
       }
 
       @Override
       public void removeUpdate(DocumentEvent e) {
+        System.out.println("NumTextField.updateBackgroundOnEachUpdate() --> removeUpdate()");
         updateBackground();
       }
 
       @Override
       public void changedUpdate(DocumentEvent e) {
+        System.out.println("NumTextField.updateBackgroundOnEachUpdate() --> changedUpdate()");
         updateBackground();
       }
     });
@@ -127,8 +130,18 @@ public class NumTextField extends JFormattedTextField {
   @Override
   public void setValue(Object value) {
     boolean validValue = true;
+    BigInteger l_val = BigInteger.ZERO;
+    // evito che venga assegnato (con setValue() da IRsa) lo stesso valore
     if (value == null || value instanceof BigInteger)
-      valore = (BigInteger) value;
+      l_val = (BigInteger) value;
+    if (valore != null)
+      if (l_val.longValue() != 0)
+        if (valore.equals(l_val)) {
+          // System.out.println("val=value");
+          return;
+        } 
+    valore = l_val;
+
     if (debug)
       System.out.printf("setValue(\"%s\")\n", (value != null ? value.toString() : "*NULL*"));
     //before setting the value, parse it by using the format

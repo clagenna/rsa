@@ -99,7 +99,8 @@ public class ProvaNumTextField extends JFrame {
         "Valore del textBox", //
         JOptionPane.OK_OPTION//
     );
-
+    bi = bi.add(BigInteger.valueOf(7));
+    txNumText.setValue(bi);
   }
 
 }

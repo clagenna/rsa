@@ -1,11 +1,10 @@
 package sm.clagenna.crypt.primi;
 
 import java.beans.Beans;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.SwingWorker;
 
 import lombok.Getter;
 import sm.clagenna.crypt.util.PrimiWorker;
@@ -17,8 +16,7 @@ public class PrimiFactory {
   private static final long          MAXV = 2_000_000_000L;
   private static final DecimalFormat fmt  = new DecimalFormat("#,###,###,###,###");
 
-  @Getter
-  private List<Long>                 liPrimi;
+  @Getter private List<Long>         liPrimi;
   PrimiWorker                        swingW;
   private int                        progrSteps;
   private long                       kProgr;
@@ -40,6 +38,7 @@ public class PrimiFactory {
   }
 
   public List<Long> creaPrimi(long p_QtaMax) {
+    Long maxPrimo = null;
     liPrimi = new ArrayList<Long>();
     liPrimi.add(Long.valueOf(2));
     liPrimi.add(Long.valueOf(3));
@@ -53,19 +52,23 @@ public class PrimiFactory {
       lx = ll++ * 6 - 1;
       if (isPrimo(lx)) {
         liPrimi.add(lx);
+        maxPrimo = lx;
         if (swingW != null)
           progressBar(p_QtaMax);
       }
       lx += 2;
       if (isPrimo(lx)) {
         liPrimi.add(lx);
+        maxPrimo = lx;
         if (swingW != null)
           progressBar(p_QtaMax);
       }
     } while (liPrimi.size() < p_QtaMax);
     Controllore cnt = Controllore.getInst();
-    if (cnt != null)
+    if (cnt != null) {
       cnt.setValue(Controllore.FLD_QTAPRIMIGEN, liPrimi.size());
+      cnt.setValue(Controllore.FLD_MAXPRIMO, BigInteger.valueOf(maxPrimo));
+    }
     return liPrimi;
   }
 

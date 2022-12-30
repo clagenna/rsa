@@ -1,0 +1,11 @@
+#RSA  key tipo priv
+#Wed Dec 28 16:56:05 CET 2022
+KeyName=pippopluto
+Key.Type=priv
+Carmicael=8678075536
+FiTotient=399191474656
+NumeroD=356173014499
+NumeroE=4339037803
+Modulus=399193030147
+NumeroP=324209
+NumeroQ=1231283

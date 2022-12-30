@@ -196,7 +196,7 @@ public class MainFrame extends JFrame implements WindowListener, IRsaListen, Pro
     gbc_CreaEeD.fill = GridBagConstraints.BOTH;
     gbc_CreaEeD.gridx = 0;
     gbc_CreaEeD.gridy = 2;
-    gbc_CreaEeD.gridwidth = 2;
+    gbc_CreaEeD.gridwidth = 1;
     panDatiIniziali.add(panCreaEeD, gbc_CreaEeD);
 
     JPanel panDatiTesto = new JPanel();

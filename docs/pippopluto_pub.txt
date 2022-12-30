@@ -1,0 +1,7 @@
+#RSA  key tipo pub
+#Wed Dec 28 16:55:59 CET 2022
+KeyName=pippopluto
+Key.Type=pub
+FiTotient=399191474656
+NumeroE=4339037803
+Modulus=399193030147
