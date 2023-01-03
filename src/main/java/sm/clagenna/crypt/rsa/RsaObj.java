@@ -147,8 +147,11 @@ public class RsaObj implements IRsaListen {
   /**
    * Calcolare D tale che <code>(DE - 1)</code> &egrave; divisibile per
    * <code>(P-1)(Q-1)</code> senza resto.<br/>
-   * I matematici scrivono questo come DE = 1 + (mod(P-1) (Q-1)). dove
-   * <code>(P-1)(Q-1)</code> &egrave; definito &#x3C6;(n)<br/>
+   * I matematici scrivono questo come<br/>
+   * <ul>
+   * <li><code>DE = 1 + (mod(P-1) (Q-1))</code>
+   * </ul>
+   * dove <code>(P-1)(Q-1)</code> &egrave; definito <b>&#x3C6;(n)</b><br/>
    * Quindi
    * <ul>
    * <li>P - numero primo 1</li>
@@ -160,12 +163,15 @@ public class RsaObj implements IRsaListen {
    * inoltre gcd(e,&#x3C6;(n)) = 1 e cio&egrave; E deve essere <b>co-primo</b>
    * con &#x3C6;(n)</li>
    * <li>D - Si chiama l'inverso moltiplicativo di E.<br/>
-   * Inoltre ED = 1 mod &#x3C6;(n)</li>
+   * Inoltre <code>ED = 1 mod &#x3C6;(n)</code></li>
    * </ul>
    * <br/>
    * Questo &egrave; facile da fare - semplicemente trovare un intero X che
-   * causa D = (X*(P-1)(Q-1) + 1) / E per essere un numero intero, quindi
-   * utilizzare tale valore di D
+   * causa
+   * <ul>
+   * <li><code>D = (X*(P-1)(Q-1) + 1) / E</code>
+   * </ul>
+   * per essere un numero intero, quindi utilizzare tale valore di D
    * <h2>tratto da Rsa.cpp</h2> Trova <b>D</b> cosi che <code>(DE - 1)</code> e'
    * divisibile da <code>(P-1)(Q-1)</code>.
    * <p>
@@ -258,8 +264,39 @@ public class RsaObj implements IRsaListen {
 
   /**
    * Algoritmo di Euclide per trovare il Minimo Comun Divisore (MCD) fra due
-   * numeri interi. L'implementazione utilizza l'iterazione invece della
-   * ricorsivit&agrave;.
+   * numeri interi.<br/>
+   * L' algoritmo euclideo si basa sul principio che il massimo comune divisore
+   * di due numeri non cambia se il numero più grande viene sostituito dalla sua
+   * differenza con il numero più piccolo.<br/>
+   * Esempio con i numeri <code>252</code> e <code>105</code><br/>
+   * <table>
+   * <tr>
+   * <td>252</td>
+   * <td>105</td>
+   * </tr>
+   * <tr>
+   * <td>147</td>
+   * <td>105</td>
+   * </tr>
+   * <tr>
+   * <td>42</td>
+   * <td>105</td>
+   * </tr>
+   * <tr>
+   * <td>42</td>
+   * <td>63</td>
+   * </tr>
+   * <tr>
+   * <td>42</td>
+   * <td>21</td>
+   * </tr>
+   * <tr>
+   * <td>21</td>
+   * <td>21</td>
+   * </tr>
+   * </table>
+   * Da qui risulta che 21 è il massimo comun divisore di 252 e 105<br/>
+   * L'implementazione utilizza l'iterazione invece della ricorsivit&agrave;.
    *
    * @param p_a
    *          primo intero

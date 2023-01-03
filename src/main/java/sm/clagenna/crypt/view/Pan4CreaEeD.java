@@ -301,20 +301,40 @@ public class Pan4CreaEeD extends JPanel implements IRsaListen {
     }
   }
 
+  /**
+   * Calcola tutti i parametri del RSA, es:<br/>
+   * <ul>
+   * <li><b>&nbsp;P</b>=8.223.541</li>
+   * <li><b>&nbsp;Q</b>=567.607</li>
+   * <li><b>&nbsp;N</b>=4.667.739.436.387</li>
+   * <li><b>Fi</b>=4.667.730.645.240</li>
+   * <li><b>Cr</b>=59.842.700.580</li>
+   * <li><b>&nbsp;E</b>=29.921.350.297</li>
+   * <li><b>&nbsp;D</b>=1.380.656.591.953</li>
+   * </ul>
+   * </pre>
+   *
+   */
   protected void calcolaEeD() {
     try {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       RsaObj rsa = MainFrame.getInst().getRsaObj();
       rsa.calcolaRSAObj();
-
-      BigInteger probe = rsa.getNQ().add(BigInteger.valueOf(121));
-
-      BigInteger verso = rsa.esponenteE(probe);
-      BigInteger ritor = rsa.esponenteD(verso);
-      NumberFormat fmt = NumberFormat.getInstance();
-      System.out.printf("Con %s ==> %s ==> %s\n", fmt.format(probe), fmt.format(verso), fmt.format(ritor));
+      boolean doTheTest = true;
+      if (doTheTest) {
+        BigInteger probe = rsa.getNQ().add(BigInteger.valueOf(121));
+        BigInteger verso = rsa.esponenteE(probe);
+        BigInteger ritor = rsa.esponenteD(verso);
+        NumberFormat fmt = NumberFormat.getInstance();
+        System.out.printf("Con %s ==> %s ==> %s\n", fmt.format(probe), fmt.format(verso), fmt.format(ritor));
+        if ( !probe.equals(ritor)) {
+          String sz = "-".repeat(10);
+          System.err.printf("%s Ahi! Ahi! porca miseria! %s\n", sz, sz);
+          System.err.printf("Non tornano i conti ! %s !=> %s\n", fmt.format(probe), fmt.format(ritor));
+          System.err.printf("%s %s %s\n", sz, sz, sz);
+        }
+      }
       rsa.stampaRis();
-
     } finally {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
